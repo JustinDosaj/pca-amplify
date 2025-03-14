@@ -1,4 +1,3 @@
-
 import { Hero } from "@/components/ui/home/Hero";
 import { Header } from "@/components/elements/Header";
 import { Footer } from "@/components/elements/Footer";

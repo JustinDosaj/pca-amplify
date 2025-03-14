@@ -1,9 +1,9 @@
 {
   "auth": {
-    "user_pool_id": "us-west-1_B0E4Xdxfm",
+    "user_pool_id": "us-west-1_9ZbuQizvZ",
     "aws_region": "us-west-1",
-    "user_pool_client_id": "3vlbeis4a1p9mk14tvacrk5b9r",
-    "identity_pool_id": "us-west-1:ce22ec21-f137-4c8d-a080-5edcbf9e7bab",
+    "user_pool_client_id": "30oarcfi7d6rseca2234957fm6",
+    "identity_pool_id": "us-west-1:7d02d795-aaa6-4596-b8c9-a10e402182ad",
     "mfa_methods": [],
     "standard_required_attributes": [
       "email"
@@ -23,10 +23,30 @@
       "require_symbols": true,
       "require_uppercase": true
     },
+    "oauth": {
+      "identity_providers": [
+        "GOOGLE"
+      ],
+      "redirect_sign_in_uri": [
+        "http://localhost:3000/"
+      ],
+      "redirect_sign_out_uri": [
+        "http://localhost:3000/"
+      ],
+      "response_type": "code",
+      "scopes": [
+        "phone",
+        "email",
+        "openid",
+        "profile",
+        "aws.cognito.signin.user.admin"
+      ],
+      "domain": "75ac227a2d5e1bfed56e.auth.us-west-1.amazoncognito.com"
+    },
     "unauthenticated_identities_enabled": true
   },
   "data": {
-    "url": "https://es67tblxkngetlwvkslrh3ui6q.appsync-api.us-west-1.amazonaws.com/graphql",
+    "url": "https://hzr5hztjj5fjvkyjggqnoxp2xm.appsync-api.us-west-1.amazonaws.com/graphql",
     "aws_region": "us-west-1",
     "default_authorization_type": "AWS_IAM",
     "authorization_types": [

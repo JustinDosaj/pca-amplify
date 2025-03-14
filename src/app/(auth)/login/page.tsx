@@ -6,11 +6,12 @@ import { Logo } from '@/components/ui/Logo'
 import { TextField } from '@/components/ui/Fields'
 import { SlimLayout } from '@/components/auth/SlimLayout'
 import { FormEvent, useState } from "react"
+import { useAuth } from '@/providers/auth.providers'
 
 
 export default function Login() {
 
-    // const { login } = useAuth();
+    const { loginWithGoogle } = useAuth();
     const [email, setEmail] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -80,7 +81,7 @@ export default function Login() {
             </div>
             <div className="mt-6 grid grid-cols-1 gap-4">
                 <button
-                onClick={() => console.log("TODO: ADD LOGIN BUTTON")}
+                onClick={loginWithGoogle}
                 className="hover:cursor-pointer flex w-full items-center justify-center gap-3 rounded-full bg-black px-3 py-2 text-sm font-semibold text-white ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-800 focus-visible:ring-transparent"
                 >
                     <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
