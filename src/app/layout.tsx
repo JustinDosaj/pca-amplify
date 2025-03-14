@@ -1,16 +1,23 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Lexend } from 'next/font/google'
 import "./globals.css";
+import { AuthProvider } from "@/providers/auth.providers";
+import clsx from "clsx";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import '@/styles/tailwind.css'
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
+
+const lexend = Lexend({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-lexend',
+})
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,12 +30,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+    <html lang="en" className={clsx(
+      'h-full scroll-smooth bg-white antialiased', inter.variable, lexend.variable )}>
+          <body className={'flex h-full flex-col'}>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </body>
     </html>
   );
 }
