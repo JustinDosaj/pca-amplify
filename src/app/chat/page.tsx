@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
 
 const ChatPage = () => {
 
@@ -38,8 +39,7 @@ const ChatPage = () => {
               className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={!message.trim()}
             >
-
-              
+              <PaperAirplaneIcon className="h-4 w-4"/>
             </button>
           </div>
         </div>
