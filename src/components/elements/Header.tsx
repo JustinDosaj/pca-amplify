@@ -51,7 +51,7 @@ function MobileNavigation() {
     return (
         <Popover>
         <PopoverButton
-            className="relative z-10 flex h-8 w-8 items-center justify-center focus:not-data-focus:outline-hidden"
+            className="relative z-10 flex h-8 w-8 items-center justify-center focus:not-data-focus:outline-hidden hover:cursor-pointer"
             aria-label="Toggle Navigation"
         >
             {({ open }) => <MobileNavIcon open={open} />}
@@ -90,7 +90,7 @@ function DesktopNavigation() {
     return (
         <Popover>
           <PopoverButton
-            className="relative z-10 flex h-8 w-8 items-center justify-center focus:not-data-focus:outline-hidden"
+            className="relative z-10 flex h-8 w-8 items-center justify-center focus:not-data-focus:outline-hidden hover:cursor-pointer"
             aria-label="Toggle Navigation"
           >
             {({ open }) => <MobileNavIcon open={open} />}
@@ -130,7 +130,7 @@ export function Header() {
             <div className="flex items-center gap-x-5 md:gap-x-8">
                 { user ?
                   // TODO: Navigate to chat app when route is determined 
-                  <Button href="/chat app" color="blue">
+                  <Button href="/chat" color="blue">
                       <span>
                           Launch App
                       </span>
