@@ -9,5 +9,6 @@ import { helloWorld } from './functions/hello-world/resource';
 defineBackend({
   auth,
   data,
+  // Server Functions
   helloWorld
 });
