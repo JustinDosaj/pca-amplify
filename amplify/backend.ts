@@ -9,6 +9,5 @@ import { chatCompletion } from './functions/chat/resource';
 defineBackend({
   auth,
   data,
-  // Server Functions
   chatCompletion
 });
