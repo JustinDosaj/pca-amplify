@@ -1,8 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
 
 const ChatPage = () => {
+
+  const [ message, setMessage ] = useState<string>('')
+
   return (
     <div className="h-screen flex bg-white">
       {/* Left Sidebar */}
@@ -16,19 +20,28 @@ const ChatPage = () => {
       </div>
       
       {/* Main Chat Section */}
-      <div className="flex-1 p-4 border-r border-gray-300 bg-gray-50 shadow-md flex flex-col">
-        <div className="flex-grow overflow-auto p-4">
+      <div className="flex flex-col flex-1">
+        <div className="flex-1 overflow-auto p-4">
           {/* Messages will go here */}
         </div>
-        <div className="mt-auto flex items-center border border-gray-300 rounded-full overflow-hidden p-1">
-          <input
-            type="text"
-            placeholder="Type a message..."
-            className="flex-1 p-2 border-none focus:outline-none"
-          />
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-500 hover:cursor-pointer">
-            Send
-          </button>
+
+        {/* Chat Input */}
+        <div className="p-4 border-t border-gray-300 bg-white shadow-md">
+          <div className="flex items-center border border-gray-300 rounded-2xl p-2 bg-gray-100 w-full focus-within:ring-2 focus-within:ring-blue-500">
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              rows={1}
+              placeholder="Type a message..."
+              className="flex-1 resize-none border-none bg-transparent outline-none p-2 text-gray-800 focus:ring-0"
+            />
+            <button
+              className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!message.trim()}
+            >
+              <PaperAirplaneIcon className="h-4 w-4"/>
+            </button>
+          </div>
         </div>
       </div>
 
