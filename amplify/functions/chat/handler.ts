@@ -1,5 +1,5 @@
-import { secret } from "@aws-amplify/backend";
-import OpenAI from "openai";
+//import { secret } from "@aws-amplify/backend";
+//import OpenAI from "openai";
 import { Schema } from "../../data/resource";
 
 export const handler: Schema["chatCompletion"]["functionHandler"] = async (event, context) => {
@@ -9,25 +9,25 @@ export const handler: Schema["chatCompletion"]["functionHandler"] = async (event
 
     try {
 
-        const client = new OpenAI({apiKey: `${secret('OPENAI_API_KEY')}`})
+        // const client = new OpenAI({apiKey: `${secret('OPENAI_API_KEY')}`})
 
-        const completion = await client.chat.completions.create({
-            model: "gpt-4o",
-            messages: [
-                {
-                    role: "user",
-                    content: "Write a one-sentence bedtime story about a unicorn.",
-                },
-            ],
-        });
+        // const completion = await client.chat.completions.create({
+        //     model: "gpt-4o",
+        //     messages: [
+        //         {
+        //             role: "user",
+        //             content: "Write a one-sentence bedtime story about a unicorn.",
+        //         },
+        //     ],
+        // });
         
-        console.log(completion)
+        //console.log(completion)
 
-        return null;
+        return "Chat";
 
     } catch (error) {
-        console.log("Error: ", error)
-        return null;
+        console.error("Error: ", error)
+        return "Bad Chat";
     }
 
 

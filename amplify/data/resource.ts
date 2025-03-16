@@ -14,7 +14,7 @@ const schema = a.schema({
     .query()
     .returns(a.string())
     .handler(a.handler.function(chatCompletion))
-    .authorization((allow) => [allow.guest()])
+    .authorization((allow) => [allow.authenticated()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -22,7 +22,7 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: 'iam',
+    defaultAuthorizationMode: 'userPool',
   },
 });
 
