@@ -1,14 +1,15 @@
-import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
 import { secret } from "@aws-amplify/backend";
 import OpenAI from "openai";
+import { Schema } from "../../data/resource";
 
-export const handler = async ( event: APIGatewayProxyEventV2 ): Promise<APIGatewayProxyResultV2> => {
+export const handler: Schema["chatCompletion"]["functionHandler"] = async (event, context) => {
+
+    console.log("Event: ", event)
+    console.log("Context: ", context)
 
     try {
 
         const client = new OpenAI({apiKey: `${secret('OPENAI_API_KEY')}`})
-        
-        console.log(event)
 
         const completion = await client.chat.completions.create({
             model: "gpt-4o",
@@ -19,20 +20,14 @@ export const handler = async ( event: APIGatewayProxyEventV2 ): Promise<APIGatew
                 },
             ],
         });
-
+        
         console.log(completion)
-        return {
-            statusCode: 200,
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ response: completion.choices[0].message.content }),
-          };
+
+        return null;
 
     } catch (error) {
         console.log("Error: ", error)
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ error: "Something went wrong" }),
-        };
+        return null;
     }
 
 
