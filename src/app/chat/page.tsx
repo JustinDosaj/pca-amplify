@@ -8,7 +8,9 @@ import { Schema } from '../../../amplify/data/resource';
 const ChatPage = () => {
 
   const [ message, setMessage ] = useState<string>('')
-  const client = generateClient<Schema>();
+  const client = generateClient<Schema>({
+    authMode: 'userPool',
+  });
 
 
   useEffect(() => {
