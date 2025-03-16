@@ -7,7 +7,9 @@ adding a new "isDone" field as a boolean. The authorization rule below
 specifies that any unauthenticated user can "create", "read", "update", 
 and "delete" any "Todo" records.
 =========================================================================*/
-const schema = a.schema({    
+const schema = a.schema({
+  
+  // I guess this comment will magically fix things?
   chatCompletion: a
     .query()
     .returns(a.string())

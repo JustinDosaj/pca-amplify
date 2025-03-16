@@ -3,21 +3,19 @@
 import React, { useState, useEffect } from 'react';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
 import { generateClient } from 'aws-amplify/api';
+import { Schema } from '../../../amplify/data/resource';
 
 const ChatPage = () => {
 
   const [ message, setMessage ] = useState<string>('')
-  const client = generateClient();
+  const client = generateClient<Schema>();
 
 
   useEffect(() => {
 
     const chat = async () => {
-      //const response = await client?.queries?.chatCompletion()
-      //console.log(response)
-
-      //client.queries.chatCompletion()
-    
+      const response = await client.queries.chatCompletion()
+      console.log(response)
     }
 
     chat();
