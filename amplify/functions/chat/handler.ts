@@ -23,7 +23,10 @@ export const handler = async ( event: APIGatewayProxyEventV2 ): Promise<APIGatew
         console.log(completion)
         return {
             statusCode: 200,
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json", 
+                'Access-Control-Allow-Origin': '*'
+            },
             body: JSON.stringify({ response: completion.choices[0].message.content }),
           };
 
@@ -31,6 +34,10 @@ export const handler = async ( event: APIGatewayProxyEventV2 ): Promise<APIGatew
         console.log("Error: ", error)
         return {
             statusCode: 500,
+            headers: { 
+                "Content-Type": "application/json", 
+                'Access-Control-Allow-Origin': '*'
+            },
             body: JSON.stringify({ error: "Something went wrong" }),
         };
     }

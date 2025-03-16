@@ -1,23 +1,23 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
-//import axios from 'axios'
+import axios from 'axios'
 
 const ChatPage = () => {
 
   const [ message, setMessage ] = useState<string>('')
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   const chat = async () => {
-  //     const response = await axios.get('https://32upo2n1vl.execute-api.us-west-1.amazonaws.com/DEV/amplify-pcaamplify-jcdos--chatcompletionlambda24BC-cCgl9mvjnjU3')
-  //     console.log(response)
-  //   }
+    const chat = async () => {
+      const response = await axios.get('https://e5tmvoq025.execute-api.us-west-1.amazonaws.com/dev/amplify-pcaamplify-jcdos--chatcompletionlambda24BC-cCgl9mvjnjU3')
+      console.log(response)
+    }
 
-  //   chat();
+    chat();
 
-  // },[])
+  },[])
 
   return (
     <div className="h-screen flex bg-white">
