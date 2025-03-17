@@ -8,13 +8,24 @@ import { Schema } from '../../../amplify/data/resource';
 const ChatPage = () => {
 
   const [ message, setMessage ] = useState<string>('')
+  const [ resMessage, setResMessage ] = useState<string>('')
+
   const client = generateClient<Schema>({
     authMode: 'userPool',
   });
 
   const handleSubmit = async () => {
-    const response = await client.queries.chatCompletion()
-    console.log(response.data?.content)
+
+    try {
+      const response = await client.queries.chatCompletion({message: 'test'})
+      setResMessage(response.data?.content || '')
+      console.log(response.data?.content)
+    } catch(error) {
+      console.log(error)
+    } finally {
+      setMessage('')
+    }
+
   }
 
 
@@ -33,7 +44,7 @@ const ChatPage = () => {
       {/* Main Chat Section */}
       <div className="flex flex-col flex-1">
         <div className="flex-1 overflow-auto p-4">
-          {/* Messages will go here */}
+          {resMessage}
         </div>
 
         {/* Chat Input */}

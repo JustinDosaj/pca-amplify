@@ -14,6 +14,9 @@ const schema = a.schema({
   
   chatCompletion: a
     .query()
+    .arguments({
+      message: a.string(),
+    })
     .returns(a.ref('chatResponse'))
     .handler(a.handler.function(chatCompletion))
     .authorization((allow) => [allow.authenticated()]),
