@@ -20,7 +20,7 @@ const ChatPage = () => {
   const handleSubmit = async () => {
 
     try {
-      const response = await client.queries.chatCompletion({message: 'test'})
+      const response = await client.queries.chatCompletion({message: message})
       setResMessage((prev) => [...prev, response.data?.content || ''])
       setMessageHistory((prev) => [...prev, message])
       console.log(response.data?.content)

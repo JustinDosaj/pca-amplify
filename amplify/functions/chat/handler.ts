@@ -4,11 +4,11 @@ import { Schema } from "../../data/resource";
 export const handler: Schema["chatCompletion"]["functionHandler"] = async (event, context) => {
 
     dotenv.config()
-    console.log("Event: ", event)
     console.log("Context: ", context)
+
+    const message: string = event.arguments.message || ''
     
     try {
-
 
         const completion = await fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
@@ -21,7 +21,7 @@ export const handler: Schema["chatCompletion"]["functionHandler"] = async (event
                 messages: [
                     {
                         role: "user",
-                        content: "Write a one-sentence bedtime story about a unicorn.",
+                        content: message,
                     }
                 ]
             })
