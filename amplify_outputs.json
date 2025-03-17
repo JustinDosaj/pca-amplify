@@ -77,7 +77,15 @@
           "type": {
             "nonModel": "chatResponse"
           },
-          "isRequired": false
+          "isRequired": false,
+          "arguments": {
+            "message": {
+              "name": "message",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            }
+          }
         }
       }
     }
