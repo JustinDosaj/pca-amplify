@@ -14,7 +14,7 @@ const ChatPage = () => {
 
   const handleSubmit = async () => {
     const response = await client.queries.chatCompletion()
-    console.log(response.data)
+    console.log(response.data?.content)
   }
 
 

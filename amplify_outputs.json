@@ -56,12 +56,27 @@
       "version": 1,
       "models": {},
       "enums": {},
-      "nonModels": {},
+      "nonModels": {
+        "chatResponse": {
+          "name": "chatResponse",
+          "fields": {
+            "content": {
+              "name": "content",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false,
+              "attributes": []
+            }
+          }
+        }
+      },
       "queries": {
         "chatCompletion": {
           "name": "chatCompletion",
           "isArray": false,
-          "type": "String",
+          "type": {
+            "nonModel": "chatResponse"
+          },
           "isRequired": false
         }
       }

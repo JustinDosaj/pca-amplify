@@ -30,12 +30,14 @@ export const handler: Schema["chatCompletion"]["functionHandler"] = async (event
         
         const data = await completion.json()
         const content: string = data.choices[0].message.content
+        const response = {
+            content: content,
+        }
 
-        return content;
+        return response;
 
     } catch (error) {
         console.error("Error: ", error)
-        return "Bad Chat";
     }
 
 

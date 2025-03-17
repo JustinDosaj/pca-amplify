@@ -8,11 +8,13 @@ specifies that any unauthenticated user can "create", "read", "update",
 and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
+  chatResponse: a.customType({
+    content: a.string(),
+  }),
   
-  // I guess this comment will magically fix things?
   chatCompletion: a
     .query()
-    .returns(a.string())
+    .returns(a.ref('chatResponse'))
     .handler(a.handler.function(chatCompletion))
     .authorization((allow) => [allow.authenticated()]),
 });
