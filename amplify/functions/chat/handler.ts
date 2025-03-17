@@ -1,16 +1,12 @@
 import dotenv from "dotenv";
 import { Schema } from "../../data/resource";
 
-// TODO: ATTACH BILLING TO CHATGPT OPEN AI API TO SEE IF THAT FIXES REQUEST ERROR
-
 export const handler: Schema["chatCompletion"]["functionHandler"] = async (event, context) => {
 
     dotenv.config()
     console.log("Event: ", event)
     console.log("Context: ", context)
-    console.log("Process.nev:", process.env.OPENAI_API_KEY)
     
-
     try {
 
 
@@ -21,7 +17,7 @@ export const handler: Schema["chatCompletion"]["functionHandler"] = async (event
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: "gpt-4o",
+                model: "gpt-3.5-turbo",
                 messages: [
                     {
                         role: "user",
@@ -31,10 +27,11 @@ export const handler: Schema["chatCompletion"]["functionHandler"] = async (event
             })
         });
         
-        console.log("Completion: ", completion)
-        //const response = completion.choices[0].message.content
+        
+        const data = await completion.json()
+        const content: string = data.choices[0].message.content
 
-        return 'chat';
+        return content;
 
     } catch (error) {
         console.error("Error: ", error)

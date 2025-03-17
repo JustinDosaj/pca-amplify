@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
 import { generateClient } from 'aws-amplify/api';
 import { Schema } from '../../../amplify/data/resource';
@@ -12,17 +12,11 @@ const ChatPage = () => {
     authMode: 'userPool',
   });
 
+  const handleSubmit = async () => {
+    const response = await client.queries.chatCompletion()
+    console.log(response.data)
+  }
 
-  useEffect(() => {
-
-    const chat = async () => {
-      const response = await client.queries.chatCompletion()
-      console.log(response)
-    }
-
-    chat();
-
-  },[client])
 
   return (
     <div className="h-screen flex bg-white">
@@ -54,7 +48,7 @@ const ChatPage = () => {
             />
             <button
               className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-500 transition disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!message.trim()}
+              onClick={handleSubmit}
             >
               <PaperAirplaneIcon className="h-4 w-4"/>
             </button>
