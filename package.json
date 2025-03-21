@@ -17,7 +17,6 @@
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
     "next": "15.2.2",
-    "openai": "^4.87.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -35,6 +34,7 @@
     "esbuild": "^0.25.1",
     "eslint": "^9",
     "eslint-config-next": "15.2.2",
+    "openai": "^4.89.0",
     "tailwindcss": "^4",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"

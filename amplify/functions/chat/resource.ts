@@ -4,6 +4,7 @@ export const chatCompletion = defineFunction({
   name: "chat-completion",
   entry: "./handler.ts",
   environment: {
-    OPENAI_API_KEY: secret('OPENAI_API_KEY')
-  }
+    OPENAI_API_KEY: secret('OPENAI_API_KEY'),
+  },
+  runtime: 22
 });

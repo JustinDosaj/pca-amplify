@@ -45,3 +45,8 @@ next-env.d.ts
 node_modules
 .amplify
 amplifyconfiguration*
+
+
+# Ignore Lambda Layer Files
+layer
+layer.zip
