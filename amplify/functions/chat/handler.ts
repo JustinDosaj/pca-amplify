@@ -2,10 +2,9 @@ import dotenv from "dotenv";
 import { Schema } from "../../data/resource";
 import OpenAI from "openai"
 
-export const handler: Schema["chatCompletion"]["functionHandler"] = async (event, context) => {
+export const handler: Schema["chatCompletion"]["functionHandler"] = async (event) => {
 
     dotenv.config()
-    console.log("Context: ", context)
 
     const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
