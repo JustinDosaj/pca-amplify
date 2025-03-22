@@ -86,6 +86,22 @@
               "isRequired": false
             }
           }
+        },
+        "removePersonalInfo": {
+          "name": "removePersonalInfo",
+          "isArray": false,
+          "type": {
+            "nonModel": "chatResponse"
+          },
+          "isRequired": false,
+          "arguments": {
+            "message": {
+              "name": "message",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            }
+          }
         }
       }
     }

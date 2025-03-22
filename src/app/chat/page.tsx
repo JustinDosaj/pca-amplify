@@ -17,10 +17,24 @@ const ChatPage = () => {
     authMode: 'userPool',
   });
 
-  const handleSubmit = async () => {
+  // const handleSubmit = async () => {
 
+  //   try {
+  //     const response = await client.queries.chatCompletion({message: message})
+  //     setResMessage((prev) => [...prev, response.data?.content || ''])
+  //     setMessageHistory((prev) => [...prev, message])
+  //     console.log(response.data?.content)
+  //   } catch(error) {
+  //     console.log(error)
+  //   } finally {
+  //     setMessage('')
+  //   }
+
+  // }
+
+  const handleSubmit = async () => {
     try {
-      const response = await client.queries.chatCompletion({message: message})
+      const response = await client.queries.removePersonalInfo({message: message})
       setResMessage((prev) => [...prev, response.data?.content || ''])
       setMessageHistory((prev) => [...prev, message])
       console.log(response.data?.content)

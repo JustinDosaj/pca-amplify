@@ -1,5 +1,6 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 import { chatCompletion } from '../functions/chat/resource';
+import { removePersonalInfo } from '../functions/remove/resource';
 
 /*== STEP 1 ===============================================================
 The section below creates a Todo database table with a "content" field. Try
@@ -19,6 +20,16 @@ const schema = a.schema({
     })
     .returns(a.ref('chatResponse'))
     .handler(a.handler.function(chatCompletion))
+    .authorization((allow) => [allow.authenticated()]),
+  
+  // Currently using same chat response as chatCompletion
+  removePersonalInfo: a
+    .query()
+    .arguments({
+      message: a.string(),
+    })
+    .returns(a.ref('chatResponse'))
+    .handler(a.handler.function(removePersonalInfo))
     .authorization((allow) => [allow.authenticated()]),
 });
 
