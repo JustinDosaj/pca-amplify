@@ -7,12 +7,12 @@ import { Footer } from "@/components/elements/Footer";
 
 export default function Home() {
 
-    const { logout } = useAuth();
+  const { logout } = useAuth();
 
   return (
     <>
       <Header/>
-      <main className="h-screen mx-auto my-auto">
+      <main className="h-screen mx-auto my-auto grid">
         <button onClick={logout}>Logout</button>
       </main>
       <Footer/>
