@@ -10,7 +10,7 @@ export const handler: Schema["removePersonalInfo"]["functionHandler"] = async (e
     // Try Comprehend
     try {
         
-        const message: string = event.arguments.message || ''
+        let message: string = event.arguments.message || ''
 
         const input = {
             Text: message, 
@@ -19,9 +19,27 @@ export const handler: Schema["removePersonalInfo"]["functionHandler"] = async (e
     
         const command = new DetectPiiEntitiesCommand(input)
         const res = await client.send(command) 
-        console.log("Comphrehend Output: ", res)
+        const entities = res?.Entities || []
+        const length = entities.length
 
-        return { content: 'success' }
+        console.log("Entities: ", entities)
+        
+        // John went to the store for Frank
+
+        for (let i = 0; i < length; i++) {
+            
+            console.log(`Message before alteration: ${message}`)
+
+            const start: number = entities[i].BeginOffset || 0
+            const end: number = entities[i].EndOffset || 0
+            const type = entities[i].Type
+
+            const substring = message.substring(start, end + 1)
+            
+            message = message.replace(substring, ` [${type}_${i}] `)
+        }
+
+        return { content: message }
 
     } catch (error) {
         console.log(error)
