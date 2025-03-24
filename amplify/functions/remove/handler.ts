@@ -26,34 +26,49 @@ export const handler: Schema["removePersonalInfo"]["functionHandler"] = async (e
         const command = new DetectPiiEntitiesCommand(input)
         const res = await client.send(command) 
         const entities = res?.Entities || []
-        const length = entities.length
+        //const length = entities.length
 
         console.log("Entities: ", entities)
-        
-        // Track difference in string length based on replacements
-        let diff = 0
-        
-        // Loop through every entity to find replacement words
-        for (let i = 0; i < length; i++) {
 
-            // Define start and end of word to be replaced
-            const start: number = (entities[i].BeginOffset || 0) + diff
-            const end: number = (entities[i].EndOffset || 0) + diff
-            const type = entities[i].Type
+        const wordMap = new Map();
 
-            // Find the string and construct the replacement
-            const original = message.substring(start, end) 
-            const replacement = ` [${type}_${i}] `
-            
-            // Calculate difference in length to re-calculate start/end next loop iteration
-            const origLen = original.length
-            const replaceLen = replacement.length
-            diff += replaceLen - origLen
+        entities?.forEach((entity, index) => {
+            const start = entity.BeginOffset || 0
+            const end = entity.EndOffset
 
-            // Replace all original words with thier replacements
-            message = message.replace(original, replacement)
-        }
+            const word = message.substring(start, end)
 
+            if (wordMap.has(word)) {
+                wordMap.get(word).push(index)
+            } else {
+                wordMap.set(word, [index])
+            }
+        })
+
+        let index = 0
+        // [NAME_0] went to the store. Jason left the store. [NAME_0] went home.
+
+        wordMap.forEach((item, name) => {
+
+            for (let i = 0; i < item.length; i++) {
+
+                // Difference of End Index and Starting Index to get length of word
+                const wordLength: number = (entities[item[i]].EndOffset || 0) - (entities[item[i]].BeginOffset || 0)
+                const type = entities[i].Type
+
+                // Get word using start of word plus length of word
+                const start = message.indexOf(name)
+                const end = start + wordLength
+                const original = message.substring(start, end)
+                const replacement = `[${type}_${index}]`
+
+                // Replace word with variable
+                message = message.replace(original, replacement)
+
+            }
+            index++
+        })
+    
         return { content: message }
 
     } catch (error) {
