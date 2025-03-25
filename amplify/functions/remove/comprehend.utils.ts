@@ -26,38 +26,40 @@ export const detectPiiEntities = async (message: string): Promise<PiiEntity[]> =
 export const removeDetections = async (message: string, entities: PiiEntity[]): Promise<string> => {
     
     try {
-        const wordMap = new Map();
+        const wordMap = new Map<string, [{word: string, index: number}]>();
+        let index = 0;
 
-        entities?.forEach((entity, index) => {
+        entities?.forEach((entity) => {
             const start: number = entity.BeginOffset || 0
             const end: number = entity.EndOffset || 0
             const word: string = message.substring(start, end)
+            const type: string = entity.Type || 'UNKNOWN'
 
-            if(wordMap.has(word)) {
-                wordMap.get(word).push(index)
+            if(wordMap.has(type)) {
+                wordMap.get(type)?.push({word: word, index: index})
             } else {
-                wordMap.set(word, [index])
+                wordMap.set(type, [{word: word, index: index }])
             }
+
+            index++
         })
 
         console.log("PII Entity Word Map: ", wordMap)
 
-        let index = 0;
+        // arr = [ { word: '123-45-6789', index: 1 }, { word: '987-65-4321', index: 3 } ]
+        // type = 'SSN'
+        wordMap.forEach((arr, type) => {
 
-        wordMap.forEach((idx, word) => {
-            for (let i = 0; i < idx.length; i++) {
-                const wordLength: number = (entities[idx[i]].EndOffset || 0) - (entities[idx[i]].BeginOffset || 0)
-                const type = entities[idx[i]].Type
-
-                const start = message.indexOf(word)
+            for (let i = 0; i < arr.length; i++) {
+                
+                const wordLength: number = (entities[arr[i].index].EndOffset || 0) - (entities[arr[i].index].BeginOffset || 0)
+                const start = message.indexOf(arr[i].word)
                 const end = start + wordLength
                 const original = message.substring(start, end)
-                const replacement = `[${type}_${index}]`
+                const replacement = `[${type}_${i}]`
 
                 message = message.replace(original, replacement)
             }
-
-            index++
         })
 
         return message;
