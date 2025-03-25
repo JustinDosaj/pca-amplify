@@ -51,7 +51,7 @@ export const handler: Schema["removePersonalInfo"]["functionHandler"] = async (e
 
                 // Difference of End Index and Starting Index to get length of word
                 const wordLength: number = (entities[item[i]].EndOffset || 0) - (entities[item[i]].BeginOffset || 0)
-                const type = entities[i].Type
+                const type = entities[item[i]].Type
 
                 // Get word using start of word plus length of word
                 const start = message.indexOf(name)
