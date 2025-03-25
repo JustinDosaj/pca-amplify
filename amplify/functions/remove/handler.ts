@@ -1,14 +1,15 @@
+import { PiiEntity } from "@aws-sdk/client-comprehend";
 import { Schema } from "../../data/resource";
-import { detectPiiEntities } from "./comprehend.utils";
+import { detectPiiEntities, removeDetections } from "./comprehend.utils";
 
 export const handler: Schema["removePersonalInfo"]["functionHandler"] = async (event) => {
 
     let message: string = event.arguments.message || ''
 
     try {   
-        console.log("Message Before: ", message)
-        message = await detectPiiEntities(message)
-        console.log("Message After: ", message)
+
+        const entities: PiiEntity[] = await detectPiiEntities(message)
+        message = await removeDetections(message, entities)
 
         return { content: message }
 

@@ -1,8 +1,8 @@
-import { ComprehendClient, DetectPiiEntitiesCommand, LanguageCode } from "@aws-sdk/client-comprehend"
+import { ComprehendClient, DetectPiiEntitiesCommand, LanguageCode, PiiEntity } from "@aws-sdk/client-comprehend"
 
 const client = new ComprehendClient({region: 'us-east-2'})    
 
-export const detectPiiEntities = async (message: string): Promise<string> => {
+export const detectPiiEntities = async (message: string): Promise<PiiEntity[]> => {
 
     try {
         const command = new DetectPiiEntitiesCommand({
@@ -13,8 +13,19 @@ export const detectPiiEntities = async (message: string): Promise<string> => {
         const res = await client.send(command)
         const entities = res?.Entities || []
 
-        console.log(`PII Entities: ${entities}`)
+        console.log(`PII Entities: `, entities)
 
+        return entities;
+
+    } catch (error) {
+        console.log("Error detecting PII Etities: ", error)
+        throw new Error
+    }
+}
+
+export const removeDetections = async (message: string, entities: PiiEntity[]): Promise<string> => {
+    
+    try {
         const wordMap = new Map();
 
         entities?.forEach((entity, index) => {
@@ -28,6 +39,8 @@ export const detectPiiEntities = async (message: string): Promise<string> => {
                 wordMap.set(word, [index])
             }
         })
+
+        console.log("PII Entity Word Map: ", wordMap)
 
         let index = 0;
 
@@ -50,7 +63,7 @@ export const detectPiiEntities = async (message: string): Promise<string> => {
         return message;
 
     } catch (error) {
-        console.log("Error detecting PII Etities: ", error)
+        console.log(error)
         throw new Error
     }
 }
