@@ -2,42 +2,39 @@ import dotenv from "dotenv";
 import { Schema } from "../../data/resource";
 import { ComprehendClient, DetectPiiEntitiesCommand, LanguageCode } from "@aws-sdk/client-comprehend";
 
-
-// PROBLEM: .replace() does NOT replace all matching words --> only the first one it finds
-// SOLUTION 1: Find all words from entity list first 
-// --> create new object/map that has all word occurance locations 
-// --> inside current loop, check object for multiple occurances
-// --> If multiple occurances exist, loop through that and keep doing .replace() until all replaced
-// SOLUTION 2: Just keep creating new vars for each name regardless of duplicates? --> inefficient
 export const handler: Schema["removePersonalInfo"]["functionHandler"] = async (event) => {
 
-    try {
+    dotenv.config()
 
-        dotenv.config()
+    try {
+        
+        // Setup comprehend client
         const client = new ComprehendClient({region: 'us-east-2'})        
         
         let message: string = event.arguments.message || ''
+        
+        // Run comprehend detection to receive entities array
+        const command = new DetectPiiEntitiesCommand({
+            Text: message,
+            LanguageCode: "en" as LanguageCode
+        })
 
-        const input = {
-            Text: message, 
-            LanguageCode: "en" as LanguageCode,
-        };
-    
-        const command = new DetectPiiEntitiesCommand(input)
         const res = await client.send(command) 
         const entities = res?.Entities || []
-        //const length = entities.length
 
-        console.log("Entities: ", entities)
+        console.log(`Entities: ${entities}`)
 
         const wordMap = new Map();
 
+        // Go through each entity and map the word and it's index from entities array
         entities?.forEach((entity, index) => {
-            const start = entity.BeginOffset || 0
-            const end = entity.EndOffset
+            
+            const start: number = entity.BeginOffset || 0
+            const end: number = entity.EndOffset || 0
+            const word: string = message.substring(start, end)
 
-            const word = message.substring(start, end)
-
+            // Check if word exists in map
+            // Add word and it's index from entities array
             if (wordMap.has(word)) {
                 wordMap.get(word).push(index)
             } else {
@@ -46,8 +43,8 @@ export const handler: Schema["removePersonalInfo"]["functionHandler"] = async (e
         })
 
         let index = 0
-        // [NAME_0] went to the store. Jason left the store. [NAME_0] went home.
 
+        // Perform word replacement for each detected word
         wordMap.forEach((item, name) => {
 
             for (let i = 0; i < item.length; i++) {
