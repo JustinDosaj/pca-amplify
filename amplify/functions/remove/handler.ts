@@ -9,9 +9,6 @@ export const handler: Schema["removePersonalInfo"]["functionHandler"] = async (e
     try {   
 
         const entities: PiiEntity[] = await detectPiiEntities(message)
-
-        console.log("Entities: ", entities)
-
         message = await removeDetections(message, entities)
 
         return { content: message }
