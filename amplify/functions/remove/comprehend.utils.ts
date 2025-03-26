@@ -2,7 +2,8 @@ import { ComprehendClient, DetectPiiEntitiesCommand, LanguageCode, PiiEntity } f
 
 const client = new ComprehendClient({region: 'us-east-2'})
 
-const ALLOWED_PII_TYPES = new Set([
+
+export const DEFAULT_PII_TYPES = [
     "ADDRESS",
     "AGE",
     "ALL",
@@ -40,9 +41,11 @@ const ALLOWED_PII_TYPES = new Set([
     "USERNAME",
     "US_INDIVIDUAL_TAX_IDENTIFICATION_NUMBER",
     "VEHICLE_IDENTIFICATION_NUMBER"
-])
+]
 
-export const detectPiiEntities = async (message: string): Promise<PiiEntity[]> => {
+export const detectPiiEntities = async (message: string, settings: string[]): Promise<PiiEntity[]> => {
+
+    const ALLOWED_PII_SETTINGS = new Set(settings)
 
     try {
         const command = new DetectPiiEntitiesCommand({
@@ -52,7 +55,7 @@ export const detectPiiEntities = async (message: string): Promise<PiiEntity[]> =
 
         const res = await client.send(command)
         const entities = (res?.Entities || []).filter((entity) => 
-            entity.Type && ALLOWED_PII_TYPES.has(entity.Type)
+            entity.Type && ALLOWED_PII_SETTINGS.has(entity.Type)
         )
 
         console.log(`PII Entities: `, entities)
@@ -110,4 +113,8 @@ export const removeDetections = async (message: string, entities: PiiEntity[]): 
         console.log(error)
         throw new Error
     }
+}
+
+export const cleanSettings = async(settings: Record<string, boolean>): Promise<string[]> => {
+    return Object.keys(settings).filter((key) => settings[key])
 }
