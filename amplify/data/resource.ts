@@ -27,6 +27,7 @@ const schema = a.schema({
     .query()
     .arguments({
       message: a.string(),
+      settings: a.json(),
     })
     .returns(a.ref('chatResponse'))
     .handler(a.handler.function(removePersonalInfo))

@@ -100,6 +100,12 @@
               "isArray": false,
               "type": "String",
               "isRequired": false
+            },
+            "settings": {
+              "name": "settings",
+              "isArray": false,
+              "type": "AWSJSON",
+              "isRequired": false
             }
           }
         }
