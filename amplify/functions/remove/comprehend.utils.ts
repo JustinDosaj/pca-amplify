@@ -1,6 +1,46 @@
 import { ComprehendClient, DetectPiiEntitiesCommand, LanguageCode, PiiEntity } from "@aws-sdk/client-comprehend"
 
-const client = new ComprehendClient({region: 'us-east-2'})    
+const client = new ComprehendClient({region: 'us-east-2'})
+
+const ALLOWED_PII_TYPES = new Set([
+    "ADDRESS",
+    "AGE",
+    "ALL",
+    "AWS_ACCESS_KEY",
+    "AWS_SECRET_KEY",
+    "BANK_ACCOUNT_NUMBER",
+    "BANK_ROUTING",
+    "CA_HEALTH_NUMBER",
+    "CA_SOCIAL_INSURANCE_NUMBER",
+    "CREDIT_DEBIT_CVV",
+    "CREDIT_DEBIT_EXPIRY",
+    "CREDIT_DEBIT_NUMBER",
+    "DATE_TIME",
+    "DRIVER_ID",
+    "EMAIL",
+    "INTERNATIONAL_BANK_ACCOUNT_NUMBER",
+    "IN_AADHAAR",
+    "IN_NREGA",
+    "IN_PERMANENT_ACCOUNT_NUMBER",
+    "IN_VOTER_NUMBER",
+    "IP_ADDRESS",
+    "LICENSE_PLATE",
+    "MAC_ADDRESS",
+    "NAME",
+    "PASSPORT_NUMBER",
+    "PASSWORD",
+    "PHONE",
+    "PIN",
+    "SSN",
+    "SWIFT_CODE",
+    "UK_NATIONAL_HEALTH_SERVICE_NUMBER",
+    "UK_NATIONAL_INSURANCE_NUMBER",
+    "UK_UNIQUE_TAXPAYER_REFERENCE_NUMBER",
+    "URL",
+    "USERNAME",
+    "US_INDIVIDUAL_TAX_IDENTIFICATION_NUMBER",
+    "VEHICLE_IDENTIFICATION_NUMBER"
+])
 
 export const detectPiiEntities = async (message: string): Promise<PiiEntity[]> => {
 
@@ -11,7 +51,9 @@ export const detectPiiEntities = async (message: string): Promise<PiiEntity[]> =
         })
 
         const res = await client.send(command)
-        const entities = res?.Entities || []
+        const entities = (res?.Entities || []).filter((entity) => 
+            entity.Type && ALLOWED_PII_TYPES.has(entity.Type)
+        )
 
         console.log(`PII Entities: `, entities)
 
