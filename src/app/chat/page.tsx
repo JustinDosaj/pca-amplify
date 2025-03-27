@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { PaperAirplaneIcon, UserCircleIcon } from '@heroicons/react/24/solid'
-import { generateClient } from 'aws-amplify/api';
-import { Schema } from '../../../amplify/data/resource';
 import { useAuth } from '@/hooks/auth.hook';
 import { PII_TYPE_OPTIONS } from '@/components/ui/chat/Options';
 import Options from '@/components/ui/chat/Options';
+import { sendChatMessage } from '@/services/chat.service';
 
 const ChatPage = () => {
   
@@ -16,7 +15,6 @@ const ChatPage = () => {
   const [ resMessage, setResMessage ] = useState<string[]>(['Fake Response']);
   const mergedMessages = [];
   const chatContainerRef = useRef<HTMLDivElement>(null);
-  const client = generateClient<Schema>({ authMode: 'userPool' });
 
 	const [privacySettings, setPrivacySettings] = useState<Record<string, boolean>>(
     PII_TYPE_OPTIONS.reduce((acc, type) => ({
@@ -35,11 +33,14 @@ const ChatPage = () => {
 	
   // Probably a service since it submits to a serverless function
   const handleSubmit = async () => {
+
     if (!message.trim()) return;
     
+    
+
     try {
-      const response = await client.queries.removePersonalInfo({message: message, settings: JSON.stringify(privacySettings)})
-      setResMessage((prev) => [...prev, response.data?.content || ''])
+      const response = await sendChatMessage({message, privacySettings})
+      setResMessage((prev) => [...prev, response])
       setMessageHistory((prev) => [...prev, message])
       setMessage('')
     } catch(error) {

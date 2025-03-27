@@ -1,4 +1,5 @@
 "use client"
+
 import { createContext, useEffect, useState, ReactNode } from "react";
 import { configureAmplify } from "@/config/auth.config";
 import { fetchAuthSession, fetchUserAttributes, signOut, signIn, signInWithRedirect } from "@aws-amplify/auth";
@@ -97,10 +98,3 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     </AuthContext.Provider>
   )
 };
-
-// Custom hook to use auth
-// export const useAuth = () => {
-//   const auth = useContext(AuthContext);
-//   if (!auth) throw new Error("useAuth must be used within an AuthProvider");
-//   return auth;
-// };
