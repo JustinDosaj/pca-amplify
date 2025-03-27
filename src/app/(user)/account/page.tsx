@@ -1,9 +1,9 @@
 
 "use client"
 
-import { useAuth } from "@/providers/auth.providers";
 import { Header } from "@/components/elements/Header";
 import { Footer } from "@/components/elements/Footer";
+import { useAuth } from "@/hooks/auth.hook";
 
 export default function Home() {
 

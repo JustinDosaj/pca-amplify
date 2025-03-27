@@ -1,5 +1,5 @@
 "use client"
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useEffect, useState, ReactNode } from "react";
 import { configureAmplify } from "@/config/auth.config";
 import { fetchAuthSession, fetchUserAttributes, signOut, signIn, signInWithRedirect } from "@aws-amplify/auth";
 import { useRouter } from "next/navigation";
@@ -18,7 +18,7 @@ interface AuthContextType {
   loginWithGoogle: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
@@ -99,8 +99,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 };
 
 // Custom hook to use auth
-export const useAuth = () => {
-  const auth = useContext(AuthContext);
-  if (!auth) throw new Error("useAuth must be used within an AuthProvider");
-  return auth;
-};
+// export const useAuth = () => {
+//   const auth = useContext(AuthContext);
+//   if (!auth) throw new Error("useAuth must be used within an AuthProvider");
+//   return auth;
+// };
