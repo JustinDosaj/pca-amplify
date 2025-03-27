@@ -4,30 +4,17 @@ import { createContext, useEffect, useState, ReactNode } from "react";
 import { configureAmplify } from "@/config/auth.config";
 import { fetchAuthSession, fetchUserAttributes, signOut, signIn, signInWithRedirect } from "@aws-amplify/auth";
 import { useRouter } from "next/navigation";
+import { IUser } from "@/types/user";
+import { IAuthContext } from "@/types/auth";
 
-interface User {
-  email: string | null;
-  username: string | null;
-}
-
-interface AuthContextType {
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
-  loginWithGoogle: () => void;
-}
-
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [user, setUser] = useState<User | null>(null);
-
+  const [user, setUser] = useState<IUser | null>(null);
   const logout = async () => {
     try {
 
@@ -70,7 +57,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const idToken = session.tokens?.idToken?.toString() || null;
       const authenticated = !!idToken;
 
-      let userData: User | null = null;
+      let userData: IUser | null = null;
       if (authenticated) {
         const attributes = await fetchUserAttributes();
         userData = {

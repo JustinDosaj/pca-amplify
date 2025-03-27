@@ -6,7 +6,7 @@ import { Logo } from '@/components/ui/Logo'
 import { TextField } from '@/components/ui/Fields'
 import { SlimLayout } from '@/components/auth/SlimLayout'
 import { FormEvent, useState } from "react"
-import { useAuth } from '@/hooks/auth.hook'
+import { useAuth } from '@/hooks/useAuth'
 
 
 export default function Login() {
