@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { PaperAirplaneIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { generateClient } from 'aws-amplify/api';
 import { Schema } from '../../../amplify/data/resource';
-import { useAuth } from '@/providers/auth.providers';
+import { useAuth } from '@/hooks/auth.hook';
 import { PII_TYPE_OPTIONS } from '@/components/ui/chat/Options';
 import Options from '@/components/ui/chat/Options';
 
@@ -25,6 +25,7 @@ const ChatPage = () => {
 			}), {})
 	)
 
+  // Probably a util because it is only used interally
 	const handleTogglePrivacy = useCallback((entity: string) => {
 			setPrivacySettings(prev => ({
 					...prev,
@@ -32,6 +33,7 @@ const ChatPage = () => {
 			}))
 	},[])
 	
+  // Probably a service since it submits to a serverless function
   const handleSubmit = async () => {
     if (!message.trim()) return;
     
