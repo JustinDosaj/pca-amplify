@@ -5,7 +5,7 @@ import { PaperAirplaneIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { generateClient } from 'aws-amplify/api';
 import { Schema } from '../../../amplify/data/resource';
 import { useAuth } from '@/providers/auth.providers';
-import { PII_TYPES } from '@/components/ui/chat/Options';
+import { PII_TYPE_OPTIONS } from '@/components/ui/chat/Options';
 import Options from '@/components/ui/chat/Options';
 
 const ChatPage = () => {
@@ -19,7 +19,7 @@ const ChatPage = () => {
   const client = generateClient<Schema>({ authMode: 'userPool' });
 
 	const [privacySettings, setPrivacySettings] = useState<Record<string, boolean>>(
-			PII_TYPES.reduce((acc, type) => ({
+    PII_TYPE_OPTIONS.reduce((acc, type) => ({
 					...acc,
 					[type.entity]: true
 			}), {})
