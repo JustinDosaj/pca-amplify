@@ -1,52 +1,18 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { PaperAirplaneIcon, UserCircleIcon } from '@heroicons/react/24/solid'
-import { useAuth } from '@/hooks/auth.hook';
-import { PII_TYPE_OPTIONS } from '@/components/ui/chat/Options';
-import Options from '@/components/ui/chat/Options';
-import { sendChatMessage } from '@/services/chat.service';
+import { useAuth } from '@/hooks/useAuth';
+import { useChat } from '@/hooks/useChat';
+import Settings from '@/components/ui/chat/Settings';
+
 
 const ChatPage = () => {
   
 	const { user } = useAuth();
-  const [ message, setMessage ] = useState<string>('');
-  const [ messageHistory, setMessageHistory] = useState<string[]>(['Fake Input']);
-  const [ resMessage, setResMessage ] = useState<string[]>(['Fake Response']);
+  const { message, messageHistory, resMessage, privacySettings, setMessage, handleTogglePrivacy, sendMessage } = useChat();
   const mergedMessages = [];
   const chatContainerRef = useRef<HTMLDivElement>(null);
-
-	const [privacySettings, setPrivacySettings] = useState<Record<string, boolean>>(
-    PII_TYPE_OPTIONS.reduce((acc, type) => ({
-					...acc,
-					[type.entity]: true
-			}), {})
-	)
-
-  // Probably a util because it is only used interally
-	const handleTogglePrivacy = useCallback((entity: string) => {
-			setPrivacySettings(prev => ({
-					...prev,
-					[entity]: !prev[entity]
-			}))
-	},[])
-	
-  // Probably a service since it submits to a serverless function
-  const handleSubmit = async () => {
-
-    if (!message.trim()) return;
-    
-    
-
-    try {
-      const response = await sendChatMessage({message, privacySettings})
-      setResMessage((prev) => [...prev, response])
-      setMessageHistory((prev) => [...prev, message])
-      setMessage('')
-    } catch(error) {
-      console.error(error)
-    }
-  }
 
   // Auto-scroll to bottom when messages update
   useEffect(() => {
@@ -55,10 +21,10 @@ const ChatPage = () => {
     }
   }, [messageHistory, resMessage]);
 
+  // Ensure there's a response available before adding it
   for (let i = 0; i < messageHistory.length; i++) {
     mergedMessages.push({ text: messageHistory[i], sender: 'user' });
 
-    // Ensure there's a response available before adding it
     if (i < resMessage.length) {
       mergedMessages.push({ text: resMessage[i], sender: 'bot' });
     }
@@ -141,7 +107,7 @@ const ChatPage = () => {
               />
             </div>
             <button
-              onClick={handleSubmit}
+              onClick={sendMessage}
               disabled={!message.trim()}
               className="
                 bg-blue-600 text-white 
@@ -159,7 +125,7 @@ const ChatPage = () => {
       
       {/* Right Sidebar */}
       <div className="w-[30vw] border-l border-slate-300/40 p-6 bg-slate-50">
-				<Options privacySettings={privacySettings} onTogglePrivacy={handleTogglePrivacy}/>
+				<Settings privacySettings={privacySettings} onTogglePrivacy={handleTogglePrivacy}/>
       </div>
     </div>
   );

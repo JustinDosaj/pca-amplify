@@ -7,7 +7,7 @@ import { NavLink } from './NavLink'
 import { Button } from '../ui/Button'
 import { Container } from '../ui/Container'
 import { Logo } from '../ui/Logo'
-import { useAuth } from '@/hooks/auth.hook'
+import { useAuth } from '@/hooks/useAuth'
 
 function MobileNavLink({href,children,}: { href: string, children: React.ReactNode}) {
   return (

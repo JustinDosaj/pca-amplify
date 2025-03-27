@@ -3,7 +3,7 @@
 
 import { Header } from "@/components/elements/Header";
 import { Footer } from "@/components/elements/Footer";
-import { useAuth } from "@/hooks/auth.hook";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Home() {
 
