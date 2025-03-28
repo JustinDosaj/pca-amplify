@@ -5,7 +5,8 @@ import { PaperAirplaneIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { useAuth } from '@/hooks/useAuth';
 import { useChat } from '@/hooks/useChat';
 import Settings from '@/components/ui/chat/Settings';
-
+import MarkdownEditor from '@uiw/react-markdown-editor';
+import remarkGfm from 'remark-gfm';
 
 const ChatPage = () => {
   
@@ -35,16 +36,16 @@ const ChatPage = () => {
       {/* Left Sidebar */}
       <div className="w-[20vw] border-r border-slate-300/40 p-6 bg-slate-50">
         <h2 className="text-lg font-semibold text-slate-900 mb-4">Menu</h2>
-        <ul className="space-y-2">
+        <div className="space-y-2">
           {['Chats', 'Contacts', 'Settings'].map((item, index) => (
-            <li 
+            <div 
               key={index} 
               className="p-3 bg-white rounded-lg text-slate-900 shadow-sm hover:bg-slate-100 transition-colors cursor-pointer"
             >
               {item}
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
       
       {/* Main Chat Section */}
@@ -67,23 +68,31 @@ const ChatPage = () => {
           ref={chatContainerRef} 
           className="flex-1 overflow-y-auto p-6 space-y-4"
         >
-          {mergedMessages.map((msg, index) => (
+        {mergedMessages.map((msg, index) => (
+          <div 
+            key={index} 
+            className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+          >
             <div 
-              key={index} 
-              className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`
+                max-w-[100%] px-4 py-2 rounded-2xl
+                ${msg.sender === 'user' 
+                  ? 'bg-blue-600 text-white' 
+                  : 'bg-white text-slate-900'}
+              `}
             >
-              <div 
-                className={`
-                  max-w-[70%] px-4 py-2 rounded-2xl 
-                  ${msg.sender === 'user' 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-slate-100 text-slate-900'}
-                `}
-              >
-                {msg.text}
-              </div>
+              {msg.sender === 'bot' ? (
+                  <MarkdownEditor.Markdown 
+                    remarkPlugins={[remarkGfm]}
+                    className="my-4"
+                    source={msg.text}
+                  />
+              ) : (
+                msg.text // Render plain text for user messages
+              )}
             </div>
-          ))}
+          </div>
+        ))}
         </div>
 
         {/* Chat Input */}
