@@ -13,10 +13,16 @@ export const handler: Schema["chatCompletion"]["functionHandler"] = async (event
         const message: string = event.arguments.message || ''
 
         const completion = await openai.chat.completions.create({
-            messages: [{ 
-                role: "user", 
-                content: message 
-            }],
+            messages: [
+                {
+                    role: "system",
+                    content: "Respond in Markdown format recongizable by React Markdown with remarkGfm"
+                },
+                { 
+                    role: "user", 
+                    content: message 
+                }
+            ],
             model: "gpt-3.5-turbo",
         });
         
