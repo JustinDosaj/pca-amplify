@@ -11,15 +11,17 @@ export const handler: Schema["chatCompletion"]["functionHandler"] = async (event
     try {
 
         const message: string = event.arguments.message || ''
+
         const completion = await openai.chat.completions.create({
             messages: [{ 
-                role: "developer", 
+                role: "user", 
                 content: message 
             }],
             model: "gpt-3.5-turbo",
         });
         
         const content = completion.choices[0].message.content
+
         const response = { content: content }
 
         return response;

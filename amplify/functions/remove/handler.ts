@@ -14,7 +14,7 @@ export const handler: Schema["removePersonalInfo"]["functionHandler"] = async (e
         const settings = await cleanSettings(settingArgs)
         const entities: PiiEntity[] = await detectPiiEntities(message, settings)
         message = await removeDetections(message, entities)
-
+        
         return { content: message }
 
     } catch (error) {

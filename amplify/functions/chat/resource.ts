@@ -6,5 +6,6 @@ export const chatCompletion = defineFunction({
   environment: {
     OPENAI_API_KEY: secret('OPENAI_API_KEY'),
   },
-  runtime: 22
+  runtime: 22,
+  timeoutSeconds: 300
 });

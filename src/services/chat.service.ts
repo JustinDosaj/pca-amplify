@@ -8,13 +8,19 @@ interface ChatProps {
 
 export const sendChatMessage = async ({message, privacySettings}: ChatProps) => {
 
+    console.log(privacySettings)
+
     const client = generateClient<Schema>({ authMode: 'userPool' })
 
     try {
         
-        const response = await client.queries.removePersonalInfo({
-            message: message,
-            settings: JSON.stringify(privacySettings)
+        // const response = await client.queries.removePersonalInfo({
+        //     message: message,
+        //     settings: JSON.stringify(privacySettings)
+        // })
+
+        const response = await client.queries.chatCompletion({
+            message: message
         })
 
         return response.data?.content || ''
