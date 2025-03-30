@@ -3,7 +3,7 @@ export interface ISettingsList {
     label: string;
 }
 
-export interface IMenu {
+export interface IAppView {
     className?: string,
-    viewWidth?: number,
+    viewWidth?: number
 }

@@ -1,6 +1,7 @@
-import { IMenu } from "@/types/settings"
+import { IAppView } from "@/types/settings"
 
-export default function Menu({className, viewWidth = 20}: IMenu) {
+
+export default function Menu({className, viewWidth = 20}: IAppView) {
 
     return (
     <div className={`${className} w-[${viewWidth}vw] border-r border-slate-300/40 p-6 bg-slate-50`}>

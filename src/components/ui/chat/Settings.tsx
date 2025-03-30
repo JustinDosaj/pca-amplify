@@ -1,13 +1,13 @@
 import { PII_TYPE_OPTIONS } from "@/config/options.config"
-import { IMenu } from "@/types/settings";
+import { IAppView } from "@/types/settings";
 
-interface ISettings extends IMenu {
+interface ISettings extends IAppView {
     privacySettings: Record<string, boolean>;
     onTogglePrivacy: (entity: string) => void;
 }
 
 export default function Settings({privacySettings, onTogglePrivacy, className, viewWidth = 30}: ISettings) {
-    console.log(viewWidth)
+    
     return (
         <div className={`${className} w-[${viewWidth}vw] border-l border-slate-300/40 p-6 bg-slate-50`}>
             <fieldset>
