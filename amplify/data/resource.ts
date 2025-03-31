@@ -9,9 +9,12 @@ specifies that any unauthenticated user can "create", "read", "update",
 and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-    chatResponse: a.customType({
-        content: a.string(),
-    }),
+    chatResponse: a
+        .customType({
+            content: a.string(),
+        }),
+
+    // Basic Chat Completion w/ Markdown Response
     chatCompletion: a
         .query()
         .arguments({
@@ -21,16 +24,14 @@ const schema = a.schema({
         .handler(a.handler.function(chatCompletion))
         .authorization((allow) => [allow.authenticated()]),
     
-    removeResponse: a.customType({
-        content: a.string()
-    }),
+    // Remove PII from Message
     removePersonalInfo: a
         .query()
         .arguments({
             message: a.string(),
             settings: a.json(),
         })
-        .returns(a.ref('removeResponse'))
+        .returns(a.ref('chatResponse'))
         .handler(a.handler.function(removePersonalInfo))
         .authorization((allow) => [allow.authenticated()]),
 });
