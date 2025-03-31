@@ -10,6 +10,45 @@ interface ChatProps {
 const openai = new OpenAI({apiKey: process.env.NEXT_PUBLIC_API_KEY, dangerouslyAllowBrowser: true});
 //const client = generateClient<Schema>({ authMode: 'userPool' })
 
+export async function* sendMsg({message, privacySettings}: ChatProps) {
+    console.log(privacySettings)
+
+    try {
+        
+        // const response = await client.queries.removePersonalInfo({
+        //     message: message,
+        //     settings: JSON.stringify(privacySettings)
+        // })
+
+        // const response = await client.queries.chatCompletion({
+        //     message: message
+        // })
+
+        const stream = await openai.chat.completions.create({
+            messages: [
+                {
+                    role: "system",
+                    content: "Respond in Markdown format recongizable by React Markdown with remarkGfm"
+                },
+                { 
+                    role: "user", 
+                    content: message 
+                }
+            ],
+            stream: true,
+            model: "gpt-3.5-turbo",
+        });
+
+        for await (const chunk of stream) {
+            console.log(`Chunk: ${chunk}`)
+            const word = chunk.choices[0].delta.content
+            if (word) { yield word }
+        }
+    } catch (error) {
+        console.log(error)
+        throw new Error
+    }
+}
 
 export const sendChatMessage = async ({message, privacySettings}: ChatProps) => {
 
@@ -26,7 +65,9 @@ export const sendChatMessage = async ({message, privacySettings}: ChatProps) => 
         //     message: message
         // })
 
-        const completion = await openai.chat.completions.create({
+        let response = ''
+
+        const stream = await openai.chat.completions.create({
             messages: [
                 {
                     role: "system",
@@ -37,17 +78,17 @@ export const sendChatMessage = async ({message, privacySettings}: ChatProps) => 
                     content: message 
                 }
             ],
+            stream: true,
             model: "gpt-3.5-turbo",
         });
 
-        const content = completion.choices[0].message.content
+        for await (const chunk of stream) {
+            console.log(`Chunk: ${chunk}`)
+            const word = chunk.choices[0].delta.content
+            if (word) { response += word }
+        }
 
-        const response = { data: { content: content } }
-
-        console.log(response)
-
-        return response.data?.content || ''
-
+        return response
     } catch (error) {
         console.log(error)
         throw new Error
