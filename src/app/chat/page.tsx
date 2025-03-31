@@ -28,7 +28,7 @@ const ChatPage = () => {
         <Settings 
             privacySettings={privacySettings} 
             onTogglePrivacy={handleTogglePrivacy}
-            viewWidth={30}
+            className="w-[30vw]"
         />
    
     </div>
