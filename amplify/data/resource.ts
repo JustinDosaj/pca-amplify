@@ -9,38 +9,39 @@ specifies that any unauthenticated user can "create", "read", "update",
 and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-  chatResponse: a.customType({
-    content: a.string(),
-  }),
-  
-  chatCompletion: a
-    .query()
-    .arguments({
-      message: a.string(),
-    })
-    .returns(a.ref('chatResponse'))
-    .handler(a.handler.function(chatCompletion))
-    .authorization((allow) => [allow.authenticated()]),
-  
-  // Currently using same chat response as chatCompletion
-  removePersonalInfo: a
-    .query()
-    .arguments({
-      message: a.string(),
-      settings: a.json(),
-    })
-    .returns(a.ref('chatResponse'))
-    .handler(a.handler.function(removePersonalInfo))
-    .authorization((allow) => [allow.authenticated()]),
+    chatResponse: a.customType({
+        content: a.string(),
+    }),
+    chatCompletion: a
+        .query()
+        .arguments({
+            message: a.string(),
+        })
+        .returns(a.ref('chatResponse'))
+        .handler(a.handler.function(chatCompletion))
+        .authorization((allow) => [allow.authenticated()]),
+    
+    removeResponse: a.customType({
+        content: a.string()
+    }),
+    removePersonalInfo: a
+        .query()
+        .arguments({
+            message: a.string(),
+            settings: a.json(),
+        })
+        .returns(a.ref('removeResponse'))
+        .handler(a.handler.function(removePersonalInfo))
+        .authorization((allow) => [allow.authenticated()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
-  schema,
-  authorizationModes: {
-    defaultAuthorizationMode: 'userPool',
-  },
+    schema,
+    authorizationModes: {
+        defaultAuthorizationMode: 'userPool',
+    },
 });
 
 /*== STEP 2 ===============================================================
