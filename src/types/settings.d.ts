@@ -5,5 +5,4 @@ export interface ISettingsList {
 
 export interface IAppView {
     className?: string,
-    viewWidth?: number
 }

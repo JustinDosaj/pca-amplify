@@ -13,7 +13,7 @@ const ChatPage = () => {
   return (
     <div className="h-screen flex bg-white font-sans">
         {/* Left Sidebar */}
-        <Menu viewWidth={20}/>
+        <Menu className="w-[15vw]"/>
       
         {/* Main Chat Section */}
         <Main
@@ -28,7 +28,7 @@ const ChatPage = () => {
         <Settings 
             privacySettings={privacySettings} 
             onTogglePrivacy={handleTogglePrivacy}
-            viewWidth={30}
+            className="w-[30vw]"
         />
    
     </div>
