@@ -6,10 +6,10 @@ interface ISettings extends IAppView {
     onTogglePrivacy: (entity: string) => void;
 }
 
-export default function Settings({privacySettings, onTogglePrivacy, className, viewWidth = 30}: ISettings) {
+export default function Settings({privacySettings, onTogglePrivacy, className }: ISettings) {
     
     return (
-        <div className={`${className} w-[${viewWidth}vw] border-l border-slate-300/40 p-6 bg-slate-50`}>
+        <div className={`${className} border-l border-slate-300/40 p-6 bg-slate-50`}>
             <fieldset>
                 <legend className="text-lg font-semibold text-slate-900">Privacy Options</legend>
                 <p className="max-w-2xl tracking-tight text-slate-700">Select what information you want to remain private</p>
