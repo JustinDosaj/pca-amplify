@@ -1,8 +1,9 @@
 import { useState, useCallback } from "react";
 import { PII_TYPE_OPTIONS } from "@/config/options.config";
-import { sendChatMessage } from "@/services/chat.service";
+import { sendMsg } from "@/services/chat.service";
 
 export const useChat = () => {
+    
     const [ message, setMessage ] = useState<string>('');
     const [ messageHistory, setMessageHistory] = useState<string[]>(['Fake Input']);
     const [ resMessage, setResMessage ] = useState<string[]>(['Fake Response']);
@@ -23,14 +24,25 @@ export const useChat = () => {
 
 
     const sendMessage = async () => {
-
         if (!message.trim()) return;
-
+    
         try {
-            const response = await sendChatMessage({message, privacySettings})
-            setResMessage(prev => [...prev, response]);
-            setMessageHistory(prev => [...prev, message]);
-            setMessage('');
+            setMessageHistory((prev) => [...prev, message]); // Store user message
+            setMessage(""); // Clear input field
+    
+            //let responseText = "";
+            setResMessage((prev) => [...prev, ""]); // Start with an empty response slot
+    
+            for await (const word of sendMsg({ message, privacySettings })) {
+                if (word) {
+                    //responseText += word;
+                    setResMessage((prev) => {
+                        const updatedMessages = [...prev];
+                        updatedMessages[updatedMessages.length - 1] += word; // Append words to last message
+                        return updatedMessages;
+                    });
+                }
+            }
         } catch (error) {
             console.error(error);
         }
