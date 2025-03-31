@@ -29,13 +29,11 @@ export const useChat = () => {
         try {
             setMessageHistory((prev) => [...prev, message]); // Store user message
             setMessage(""); // Clear input field
-    
-            //let responseText = "";
             setResMessage((prev) => [...prev, ""]); // Start with an empty response slot
     
             for await (const word of sendMsg({ message, privacySettings })) {
+                console.log(word)
                 if (word) {
-                    //responseText += word;
                     setResMessage((prev) => {
                         const updatedMessages = [...prev];
                         updatedMessages[updatedMessages.length - 1] += word; // Append words to last message
