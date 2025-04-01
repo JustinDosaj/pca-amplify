@@ -34,6 +34,13 @@ const schema = a.schema({
         .returns(a.ref('chatResponse'))
         .handler(a.handler.function(removePersonalInfo))
         .authorization((allow) => [allow.authenticated()]),
+    
+    chat: a
+        .conversation({
+            aiModel: a.ai.model('Claude 3.5 Haiku'),
+            systemPrompt: 'Respond in Markdown format recongizable by React Markdown with remarkGfm'
+        })
+        .authorization((allow) => allow.owner())
 });
 
 export type Schema = ClientSchema<typeof schema>;
