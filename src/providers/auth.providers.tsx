@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useEffect, useState, ReactNode } from "react";
-import { configureAmplify } from "@/config/auth.config";
+import { configureAmplify } from "@/config/amplify.config";
 import { fetchAuthSession, fetchUserAttributes, signOut, signIn, signInWithRedirect } from "@aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { IUser } from "@/types/user";
@@ -9,6 +9,7 @@ import { IAuthContext } from "@/types/auth";
 
 export const AuthContext = createContext<IAuthContext | undefined>(undefined);
 
+// TODO: Use fetchAuthSession to get tokenId.toString() to authorize HTTP requests
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
   const router = useRouter();
