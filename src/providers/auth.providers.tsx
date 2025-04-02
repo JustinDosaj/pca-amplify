@@ -16,6 +16,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [user, setUser] = useState<IUser | null>(null);
+  
   const logout = async () => {
     try {
 
@@ -64,6 +65,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         userData = {
           email: attributes.email || null,
           username: attributes.sub || null,
+          idToken: idToken
         };
       }
 
