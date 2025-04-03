@@ -16,7 +16,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@uiw/react-markdown-editor": "^6.1.2",
     "aws-amplify": "^6.13.5",
-    "axios": "^1.8.3",
+    "axios": "^1.8.4",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
     "next": "15.2.2",
