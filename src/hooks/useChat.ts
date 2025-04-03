@@ -1,9 +1,12 @@
 import { useState, useCallback } from "react";
 import { PII_TYPE_OPTIONS } from "@/config/options.config";
 import { sendMsg } from "@/services/chat.service";
+import { useAuth } from "./useAuth";
 
 export const useChat = () => {
     
+    const { user } = useAuth();
+
     const [ message, setMessage ] = useState<string>('');
     const [ messageHistory, setMessageHistory] = useState<string[]>(['Fake Input']);
     const [ resMessage, setResMessage ] = useState<string[]>(['Fake Response']);
@@ -31,7 +34,7 @@ export const useChat = () => {
             setMessage(""); // Clear input field
             setResMessage((prev) => [...prev, ""]); // Start with an empty response slot
     
-            for await (const word of sendMsg({ message, privacySettings })) {
+            for await (const word of sendMsg({ message, privacySettings, id: user.idToken })) {
                 console.log(word)
                 if (word) {
                     setResMessage((prev) => {
