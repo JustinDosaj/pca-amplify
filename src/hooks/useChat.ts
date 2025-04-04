@@ -30,20 +30,10 @@ export const useChat = () => {
         if (!message.trim()) return;
     
         try {
-            setMessageHistory((prev) => [...prev, message]); // Store user message
-            setMessage(""); // Clear input field
-            setResMessage((prev) => [...prev, ""]); // Start with an empty response slot
-    
-            for await (const word of sendMsg({ message, privacySettings, id: user.idToken })) {
-                console.log(word)
-                if (word) {
-                    setResMessage((prev) => {
-                        const updatedMessages = [...prev];
-                        updatedMessages[updatedMessages.length - 1] += word; // Append words to last message
-                        return updatedMessages;
-                    });
-                }
-            }
+            const response = await sendMsg({message, privacySettings, id: user.idToken})
+            setResMessage(prev => [...prev, response]);
+            setMessageHistory(prev => [...prev, message]);
+            setMessage('');
         } catch (error) {
             console.error(error);
         }

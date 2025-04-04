@@ -1,5 +1,6 @@
-//import OpenAI from "openai";
 import axios from "axios";
+// import { Schema } from "../../amplify/data/resource";
+// import { generateClient } from "aws-amplify/api";
 
 interface ChatProps {
     message: string,
@@ -7,17 +8,27 @@ interface ChatProps {
     id: string,
 }
 
-//const openai = new OpenAI({apiKey: process.env.NEXT_PUBLIC_API_KEY, dangerouslyAllowBrowser: true});
+//const client = generateClient<Schema>({ authMode: 'userPool' })
 
-export async function* sendMsg({message, privacySettings, id}: ChatProps) {
+export async function sendMsg({message, privacySettings, id = ''}: ChatProps) {
     
     console.log(privacySettings)
+    console.log(id)
 
     try {
 
-        const res = await axios.post(
-            'https://lr92oquqll.execute-api.us-west-1.amazonaws.com/dev/chat-completion', 
-            { message: message },  // This is your request body
+        // const response = await client.queries.removePersonalInfo({
+        //     message: message,
+        //     settings: JSON.stringify(privacySettings)
+        // })
+
+        // const response = await client.queries.chatCompletion({
+        //     message: message
+        // })
+
+        const response = await axios.post('https://htrpz2m50c.execute-api.us-west-1.amazonaws.com/dev/chat-completion', { 
+              message: message 
+            },  // This is your request body
             {
               headers: {
                 "Content-Type": "application/json",
@@ -26,29 +37,7 @@ export async function* sendMsg({message, privacySettings, id}: ChatProps) {
             }
           );
 
-        const content = res?.data.content
-
-        // const stream = await openai.chat.completions.create({
-        //     messages: [
-        //         {
-        //             role: "system",
-        //             content: "Respond in Markdown format recongizable by React Markdown with remarkGfm"
-        //         },
-        //         { 
-        //             role: "user", 
-        //             content: message 
-        //         }
-        //     ],
-        //     stream: true,
-        //     model: "gpt-3.5-turbo",
-        // });
-
-        // for await (const chunk of stream) {
-        //     const word = chunk.choices[0].delta.content
-        //     if (word) { yield word }
-        // }
-
-        yield content
+        return response.data?.content || ''
 
     } catch (error) {
         console.log(error)

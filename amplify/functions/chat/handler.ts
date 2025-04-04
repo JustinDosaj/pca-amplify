@@ -4,6 +4,8 @@ import OpenAI from "openai"
 
 export const handler: Schema["chatCompletion"]["functionHandler"] = async (event) => {
 
+    console.log("Starting Chat Completion")
+
     dotenv.config()
     const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
