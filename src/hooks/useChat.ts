@@ -30,7 +30,7 @@ export const useChat = () => {
         if (!message.trim()) return;
     
         try {
-            const response = await sendMsg({message, privacySettings, id: user.idToken})
+            const response = await sendMsg({message, privacySettings, user: user})
             setResMessage(prev => [...prev, response]);
             setMessageHistory(prev => [...prev, message]);
             setMessage('');

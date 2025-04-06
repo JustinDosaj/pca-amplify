@@ -64,7 +64,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const attributes = await fetchUserAttributes();
         userData = {
           email: attributes.email || null,
-          username: attributes.sub || null,
+          sub: attributes.sub || null,
           idToken: idToken
         };
       }
