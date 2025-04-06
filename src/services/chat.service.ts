@@ -1,19 +1,21 @@
 import axios from "axios";
 // import { Schema } from "../../amplify/data/resource";
 // import { generateClient } from "aws-amplify/api";
+import { IUser } from "@/types/user";
 
 interface ChatProps {
     message: string,
     privacySettings: Record<string, boolean>
-    id: string,
+    user: IUser
 }
 
 //const client = generateClient<Schema>({ authMode: 'userPool' })
 
-export async function sendMsg({message, privacySettings, id = ''}: ChatProps) {
+export async function sendMsg({message, privacySettings, user}: ChatProps) {
     
     console.log(privacySettings)
-    console.log(id)
+    const { idToken } = user
+
 
     try {
 
@@ -26,13 +28,14 @@ export async function sendMsg({message, privacySettings, id = ''}: ChatProps) {
         //     message: message
         // })
 
-        const response = await axios.post('https://htrpz2m50c.execute-api.us-west-1.amazonaws.com/dev/chat-completion', { 
+        const response = await axios.post('https://orxamov415.execute-api.us-west-1.amazonaws.com/dev/chat-completion', { 
+              conversationId: '<REPLACE_WITH_ID>',
               message: message 
             },  // This is your request body
             {
               headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${id}`
+                "Authorization": `Bearer ${idToken}`
               }
             }
           );
