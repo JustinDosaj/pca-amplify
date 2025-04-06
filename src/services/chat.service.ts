@@ -29,7 +29,7 @@ export async function sendMsg({message, privacySettings, user}: ChatProps) {
         // })
 
         const response = await axios.post('https://orxamov415.execute-api.us-west-1.amazonaws.com/dev/chat-completion', { 
-              conversationId: '<REPLACE_WITH_ID>',
+              //conversationId: '<REPLACE_WITH_ID>',
               message: message 
             },  // This is your request body
             {

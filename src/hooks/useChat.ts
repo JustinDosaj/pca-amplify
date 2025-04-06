@@ -3,29 +3,19 @@ import { PII_TYPE_OPTIONS } from "@/config/options.config";
 import { sendMsg } from "@/services/chat.service";
 import { useAuth } from "./useAuth";
 
+// TODO: Rethink how hooks are used with conversations and chats
+// 1. Create useConversations hook that retrieves and displays conversations
+// 2. Redesign useChat hook to take in conversationId and load out initialy history based on id
 export const useChat = () => {
     
     const { user } = useAuth();
 
+    // Chat and Message Variables
     const [ message, setMessage ] = useState<string>('');
     const [ messageHistory, setMessageHistory] = useState<string[]>(['Fake Input']);
     const [ resMessage, setResMessage ] = useState<string[]>(['Fake Response']);
 
-    const [privacySettings, setPrivacySettings] = useState<Record<string, boolean>>(
-    PII_TYPE_OPTIONS.reduce((acc, type) => ({
-            ...acc,
-            [type.entity]: true
-        }), {})
-    )
-
-    const handleTogglePrivacy = useCallback((entity: string) => {
-        setPrivacySettings(prev => ({
-            ...prev,
-            [entity]: !prev[entity]
-        }))
-    },[])
-
-
+    
     const sendMessage = async () => {
         if (!message.trim()) return;
     
@@ -39,13 +29,33 @@ export const useChat = () => {
         }
     };
 
+    // Privacy 
+    const [privacySettings, setPrivacySettings] = useState<Record<string, boolean>>(
+
+    PII_TYPE_OPTIONS.reduce((acc, type) => ({
+            ...acc,
+            [type.entity]: true
+        }), {})
+    )
+
+    const handleTogglePrivacy = useCallback((entity: string) => {
+        setPrivacySettings(prev => ({
+            ...prev,
+            [entity]: !prev[entity]
+        }))
+    },[])
+
     return {
+        // Chat Messages
         message,
         messageHistory,
         resMessage,
-        privacySettings,
         setMessage,
-        handleTogglePrivacy,
-        sendMessage
+        sendMessage,
+
+       // Privacy
+        privacySettings,
+        handleTogglePrivacy
+
     }
 }
