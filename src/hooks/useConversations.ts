@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "./useAuth";
-import { getConversations } from "@/services/conversation.service";
+import { getConversations } from "@/services/api.service";
 
 export const useConversations = () => {
 
