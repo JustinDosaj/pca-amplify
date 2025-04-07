@@ -10,7 +10,7 @@ import { useConversations } from '@/hooks/useConversations';
 const ChatPage = () => {
   
   const { message, messageHistory, resMessage, setMessage, sendMessage, privacySettings, handleTogglePrivacy } = useChat();
-  const { fetchConversations, conversations } = useConversations()
+  const { fetchConversations, conversations, setActiveConversation } = useConversations()
 
   // Load initial conversations
   useEffect(() => {
@@ -22,7 +22,9 @@ const ChatPage = () => {
         {/* Left Sidebar */}
         <Menu 
           conversations={conversations}
-          className="w-[15vw]"/>
+          setActiveConversation={setActiveConversation}
+          className="w-[15vw]"  
+        />
       
         {/* Main Chat Section */}
         <Main
