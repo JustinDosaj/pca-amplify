@@ -7,9 +7,7 @@ interface IMenu extends IAppView {
 
 export default function Menu({className, conversations}: IMenu) {
 
-    console.log(conversations)
-
-    return (
+  return (
     <div className={`${className} border-r border-slate-300/40 p-6 bg-slate-50`}>
         <h2 className="text-lg font-semibold text-slate-900 mb-4">Menu</h2>
         <div className="space-y-2">
@@ -23,5 +21,5 @@ export default function Menu({className, conversations}: IMenu) {
           ))}
         </div>
     </div>
-    )
+  )
 }

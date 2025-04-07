@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { PII_TYPE_OPTIONS } from "@/config/options.config";
-import { sendMsg } from "@/services/chat.service";
+import { sendMsg } from "@/services/api.service";
 import { useAuth } from "./useAuth";
 
 // TODO: Rethink how hooks are used with conversations and chats
