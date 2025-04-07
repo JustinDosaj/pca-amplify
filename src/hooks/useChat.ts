@@ -30,9 +30,8 @@ export const useChat = () => {
     };
 
     // Privacy 
-    const [privacySettings, setPrivacySettings] = useState<Record<string, boolean>>(
-
-    PII_TYPE_OPTIONS.reduce((acc, type) => ({
+    const [privacySettings, setPrivacySettings] = useState<Record<string, boolean>>(        
+        PII_TYPE_OPTIONS.reduce((acc, type) => ({
             ...acc,
             [type.entity]: true
         }), {})
