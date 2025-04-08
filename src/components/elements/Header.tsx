@@ -130,7 +130,7 @@ export function Header() {
             <div className="flex items-center gap-x-5 md:gap-x-8">
                 { user ?
                   // TODO: Navigate to chat app when route is determined 
-                  <Button href="/chat" color="blue">
+                  <Button href="/chat/new" color="blue">
                       <span>
                           Launch App
                       </span>
