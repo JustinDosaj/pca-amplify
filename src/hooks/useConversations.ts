@@ -6,7 +6,6 @@ export const useConversations = () => {
 
     const { user } = useAuth();
     const [ conversations, setConversations ] = useState(null)
-    const [ activeConversation, setActiveConversation ] = useState<string>('')
 
     const fetchConversations = async () => {
         if (user && conversations === null) {
@@ -17,8 +16,6 @@ export const useConversations = () => {
 
     return {
         conversations,
-        activeConversation,
-        setActiveConversation,
         fetchConversations
     }
 }

@@ -4,18 +4,17 @@ import { UserCircleIcon } from '@heroicons/react/24/solid'
 import MarkdownEditor from '@uiw/react-markdown-editor';
 import remarkGfm from 'remark-gfm';
 import Input from "./Input";
+import { IMessage } from "@/types/chat";
 
 interface IMain extends IAppView {
-    message: string,
-    messageHistory: string[],
-    resMessage: string[],
+    input: string,
+    messages: IMessage[],
     setMessage: React.Dispatch<SetStateAction<string>>,
     sendMessage: () => Promise<void>
 }
 
-export default function Main({className, message, messageHistory, resMessage, setMessage, sendMessage}: IMain) {
-    
-    const mergedMessages = [];
+export default function Main({className, input, messages, setMessage, sendMessage}: IMain) {
+
     const chatContainerRef = useRef<HTMLDivElement>(null);
     
     // Auto-scroll to bottom when messages update
@@ -23,17 +22,8 @@ export default function Main({className, message, messageHistory, resMessage, se
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
-    }, [messageHistory, resMessage]);
+    }, [messages]);
     
-      // Ensure there's a response available before adding it
-    for (let i = 0; i < messageHistory.length; i++) {
-        mergedMessages.push({ text: messageHistory[i], sender: 'user' });
-
-        if (i < resMessage.length) {
-            mergedMessages.push({ text: resMessage[i], sender: 'bot' });
-        }
-    }
-
     return (
         <div className={`${className} flex flex-col flex-1 bg-white`}>
             {/* Header */}
@@ -46,7 +36,7 @@ export default function Main({className, message, messageHistory, resMessage, se
 
             {/* Chat Messages Section */}
             <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-6 space-y-4">
-                {mergedMessages.map((msg, index) => (
+                {messages.map((msg, index) => (
                     <div key={index} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                         <div className={`
                             max-w-[100%] px-4 py-2 rounded-2xl
@@ -59,10 +49,10 @@ export default function Main({className, message, messageHistory, resMessage, se
                             <MarkdownEditor.Markdown 
                                 remarkPlugins={[remarkGfm]}
                                 className="my-4"
-                                source={msg.text}
+                                source={msg.content}
                             />
                         ) : (
-                            msg.text // Render plain text for user messages
+                            msg.content // Render plain text for user messages
                         )}
                         </div>
                     </div>
@@ -70,7 +60,7 @@ export default function Main({className, message, messageHistory, resMessage, se
             </div>
 
             <Input 
-                message={message}
+                input={input}
                 setMessage={setMessage}
                 sendMessage={sendMessage}
             />

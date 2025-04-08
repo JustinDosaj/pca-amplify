@@ -6,11 +6,13 @@ import Settings from '@/components/ui/chat/Settings';
 import Menu from '@/components/ui/chat/Menu';
 import Main from '@/components/ui/chat/Main';
 import { useConversations } from '@/hooks/useConversations';
+import { useParams } from 'next/navigation';
 
 const ChatPage = () => {
   
-  const { message, messageHistory, resMessage, setMessage, sendMessage, privacySettings, handleTogglePrivacy } = useChat();
-  const { fetchConversations, conversations, setActiveConversation } = useConversations()
+  const { conversationId } = useParams() as { conversationId: string }
+  const { input, setInput, messages, handleSendMessage, privacySettings, handleTogglePrivacy } = useChat(conversationId);
+  const { fetchConversations, conversations } = useConversations()
 
   // Load initial conversations
   useEffect(() => {
@@ -22,17 +24,15 @@ const ChatPage = () => {
         {/* Left Sidebar */}
         <Menu 
           conversations={conversations}
-          setActiveConversation={setActiveConversation}
           className="w-[15vw]"  
         />
       
         {/* Main Chat Section */}
         <Main
-          message={message}
-          messageHistory={messageHistory}
-          resMessage={resMessage}
-          setMessage={setMessage}
-          sendMessage={sendMessage}
+          input={input}
+          messages={messages}
+          setMessage={setInput}
+          sendMessage={handleSendMessage}
         />
       
         {/* Right Sidebar */}

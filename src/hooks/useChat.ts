@@ -1,33 +1,67 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { PII_TYPE_OPTIONS } from "@/config/options.config";
-import { sendMsg } from "@/services/api.service";
+import { getMessages, sendMessage } from "@/services/api.service";
 import { useAuth } from "./useAuth";
+import { IMessage, IResponse } from "@/types/chat";
+import { useRouter } from "next/navigation";
 
 // TODO: Rethink how hooks are used with conversations and chats
 // 1. Create useConversations hook that retrieves and displays conversations
 // 2. Redesign useChat hook to take in conversationId and load out initialy history based on id
-export const useChat = () => {
+export const useChat = (conversationId: string | null) => {
+
+    if (conversationId == 'new') {
+        conversationId = null
+    }
     
     const { user } = useAuth();
 
-    // Chat and Message Variables
-    const [ message, setMessage ] = useState<string>('');
-    const [ messageHistory, setMessageHistory] = useState<string[]>(['Fake Input']);
-    const [ resMessage, setResMessage ] = useState<string[]>(['Fake Response']);
+    const router = useRouter();
+    const [messages, setMessages] = useState<IMessage[]>([]);
+    const [input, setInput] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
+      // 🧠 If there's a conversationId, load its messages
+    useEffect(() => {
+        if (!conversationId || !user ) return;
+
+            const loadMessages = async () => {
+            const response = await getMessages({user, conversationId})
+            setMessages(response || []);
+        };
+
+        loadMessages();
+    }, [user, conversationId]);
+
+    const handleSendMessage = async () => {
+        
+        if (!input.trim()) return;
+        setIsLoading(true);
     
-    const sendMessage = async () => {
-        if (!message.trim()) return;
+        // Optimistic update
+        setMessages(prev => [...prev, { sender: 'user', content: input }]);
+        setInput('');
     
         try {
-            const response = await sendMsg({message, privacySettings, user: user})
-            setResMessage(prev => [...prev, response]);
-            setMessageHistory(prev => [...prev, message]);
-            setMessage('');
-        } catch (error) {
-            console.error(error);
+          let response: IResponse;
+    
+          // New chat
+          if (!conversationId) {
+            response = await sendMessage({input, privacySettings, user, conversationId})
+            router.push(`/chat/${response.conversationId}`); // Move to new chat route
+          } 
+          
+          // Existing chat
+          else {
+            response = await sendMessage({input, privacySettings, user, conversationId})
+            setMessages(prev => [...prev, { sender: 'bot', content: response.content }]);
+          }
+        } catch (e) {
+          console.error('Message send error:', e);
         }
-    };
+    
+        setIsLoading(false);
+    };    
 
     // Privacy 
     const [privacySettings, setPrivacySettings] = useState<Record<string, boolean>>(        
@@ -46,12 +80,11 @@ export const useChat = () => {
 
     return {
         // Chat Messages
-        message,
-        messageHistory,
-        resMessage,
-        setMessage,
-        sendMessage,
-
+        input,
+        setInput,
+        messages,
+        isLoading,
+        handleSendMessage,
        // Privacy
         privacySettings,
         handleTogglePrivacy
