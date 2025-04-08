@@ -3,29 +3,29 @@ import { IUser } from "@/types/user";
 
 interface ConversationProps {
     user: IUser,
-    conversationId?: string,
-    message?: string,
+    conversationId?: string | null,
+    input?: string,
     privacySettings?: Record<string, boolean>
 }
 
-export async function sendMsg({message, privacySettings, user}: ConversationProps) {
+export async function sendMessage({input, conversationId, privacySettings, user}: ConversationProps) {
     
     console.log(privacySettings)
     const { idToken } = user
 
     const response = await axios.post('https://orxamov415.execute-api.us-west-1.amazonaws.com/dev/chat-completion', { 
-            //conversationId: '<REPLACE_WITH_ID>',
-            message: message 
+            conversationId: conversationId,
+            message: input 
         },  // This is your request body
         {
             headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${idToken}`
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${idToken}`
             }
         }
-        );
+    );
 
-    return response.data?.content || ''
+    return response.data || ''
 }
 
 export async function getConversations({user}: ConversationProps) {
