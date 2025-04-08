@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 const ChatPage = () => {
   
     const { conversationId } = useParams() as { conversationId: string };
-    const { input, setInput, messages, handleSendMessage, privacySettings, handleTogglePrivacy } = useChat(conversationId);
+    const { input, setInput, messages, handleSendMessage, privacySettings, handleTogglePrivacy, setTitle } = useChat(conversationId);
     const { fetchConversations, conversations, conversationIdList } = useConversations();
     const router = useRouter();
 
@@ -21,9 +21,13 @@ const ChatPage = () => {
         fetchConversations(); 
         
         // Temporary method to ensuring users are only on valid urls
-        if (conversationIdList.length !== 0) {
+        if (conversations && conversationIdList.length !== 0) {
 
             const found = conversationIdList.find((id) => id === conversationId)
+            const filter = conversations.filter((item) => item.conversationId == conversationId)
+            if (filter.length > 0) {
+                setTitle(filter[0].title)
+            }
             
             if (!found && conversationId !== 'new') {
                 router.replace('/chat/new')

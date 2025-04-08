@@ -5,9 +5,6 @@ import { useAuth } from "./useAuth";
 import { IMessage, IResponse } from "@/types/chat";
 import { useRouter } from "next/navigation";
 
-// TODO: Rethink how hooks are used with conversations and chats
-// 1. Create useConversations hook that retrieves and displays conversations
-// 2. Redesign useChat hook to take in conversationId and load out initialy history based on id
 export const useChat = (conversationId: string | null) => {
 
     if (conversationId == 'new') {
@@ -19,6 +16,7 @@ export const useChat = (conversationId: string | null) => {
     const router = useRouter();
     const [messages, setMessages] = useState<IMessage[]>([]);
     const [input, setInput] = useState('');
+    const [title, setTitle] = useState('')
     const [isLoading, setIsLoading] = useState(false);
 
       // 🧠 If there's a conversationId, load its messages
@@ -33,7 +31,7 @@ export const useChat = (conversationId: string | null) => {
         loadMessages();
     }, [user, conversationId]);
 
-    const handleSendMessage = async () => {
+    const  handleSendMessage = async () => {
         
         if (!input.trim()) return;
         setIsLoading(true);
@@ -47,13 +45,13 @@ export const useChat = (conversationId: string | null) => {
     
           // New chat
           if (!conversationId) {
-            response = await sendMessage({input, privacySettings, user, conversationId})
+            response = await sendMessage({input, privacySettings, user, conversationId, title})
             router.push(`/chat/${response.conversationId}`); // Move to new chat route
           } 
           
           // Existing chat
           else {
-            response = await sendMessage({input, privacySettings, user, conversationId})
+            response = await sendMessage({input, privacySettings, user, conversationId, title})
             setMessages(prev => [...prev, { sender: 'bot', content: response.content }]);
           }
         } catch (e) {
@@ -82,6 +80,8 @@ export const useChat = (conversationId: string | null) => {
         // Chat Messages
         input,
         setInput,
+        title,
+        setTitle,
         messages,
         isLoading,
         handleSendMessage,
