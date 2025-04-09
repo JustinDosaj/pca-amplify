@@ -9,6 +9,15 @@ interface IInput extends IAppView {
 }
 
 export default function Input({input, setInput, sendMessage, className}: IInput) {
+
+    const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            if (input.trim()) {
+                await sendMessage();
+            }
+        }
+    }
     
     return (
         <div className={`${className} p-4 border-t border-slate-300/40`}>
@@ -17,6 +26,7 @@ export default function Input({input, setInput, sendMessage, className}: IInput)
                 <textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
                     rows={1}
                     placeholder="Type a message..."
                     className="w-full px-4 py-2 border border-slate-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-slate-900 placeholder-slate-500"
