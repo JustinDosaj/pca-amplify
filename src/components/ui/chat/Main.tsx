@@ -1,6 +1,5 @@
 import { IAppView } from "@/types/settings";
 import React, { SetStateAction, useEffect, useRef } from 'react';
-import { UserCircleIcon } from '@heroicons/react/24/solid'
 import MarkdownEditor from '@uiw/react-markdown-editor';
 import remarkGfm from 'remark-gfm';
 import Input from "./Input";
@@ -29,8 +28,7 @@ export default function Main({className, input, messages, setInput, sendMessage}
             {/* Header */}
             <div className="border-b border-slate-300/40 p-4 flex justify-between items-center">
                 <div className="flex items-center">
-                    <UserCircleIcon className="h-8 w-auto mr-4" />
-                    <h1 className="text-xl font-semibold text-slate-900">Chat</h1>
+                    <h1 className="text-xl font-semibold text-slate-900">Other Stuff like settings can go up here</h1>
                 </div>
             </div>
 
