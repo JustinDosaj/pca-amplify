@@ -4,11 +4,11 @@ import { PaperAirplaneIcon } from "@heroicons/react/24/solid"
 
 interface IInput extends IAppView {
     input: string,
-    setMessage: React.Dispatch<SetStateAction<string>>;
+    setInput: React.Dispatch<SetStateAction<string>>;
     sendMessage: () => Promise<void>
 }
 
-export default function Input({input, setMessage, sendMessage, className}: IInput) {
+export default function Input({input, setInput, sendMessage, className}: IInput) {
     
     return (
         <div className={`${className} p-4 border-t border-slate-300/40`}>
@@ -16,7 +16,7 @@ export default function Input({input, setMessage, sendMessage, className}: IInpu
                 <div className="flex-1">
                 <textarea
                     value={input}
-                    onChange={(e) => setMessage(e.target.value)}
+                    onChange={(e) => setInput(e.target.value)}
                     rows={1}
                     placeholder="Type a message..."
                     className="w-full px-4 py-2 border border-slate-300 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-slate-900 placeholder-slate-500"
