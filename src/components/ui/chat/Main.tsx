@@ -9,11 +9,11 @@ import { IMessage } from "@/types/chat";
 interface IMain extends IAppView {
     input: string,
     messages: IMessage[],
-    setMessage: React.Dispatch<SetStateAction<string>>,
+    setInput: React.Dispatch<SetStateAction<string>>,
     sendMessage: () => Promise<void>
 }
 
-export default function Main({className, input, messages, setMessage, sendMessage}: IMain) {
+export default function Main({className, input, messages, setInput, sendMessage}: IMain) {
 
     const chatContainerRef = useRef<HTMLDivElement>(null);
     
@@ -61,7 +61,7 @@ export default function Main({className, input, messages, setMessage, sendMessag
 
             <Input 
                 input={input}
-                setMessage={setMessage}
+                setInput={setInput}
                 sendMessage={sendMessage}
             />
 

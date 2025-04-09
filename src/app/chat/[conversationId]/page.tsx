@@ -46,10 +46,10 @@ const ChatPage = () => {
         
         {/* Main Chat Section */}
         <Main
-          input={input}
-          messages={messages}
-          setMessage={setInput}
-          sendMessage={handleSendMessage}
+            input={input}
+            messages={messages}
+            setInput={setInput}
+            sendMessage={handleSendMessage}
         />
       
         {/* Right Sidebar */}
