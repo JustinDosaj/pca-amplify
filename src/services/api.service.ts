@@ -6,16 +6,14 @@ interface ConversationProps {
     conversationId?: string | null,
     input?: string,
     privacySettings?: Record<string, boolean>
-    title?: string,
 }
 
-export async function sendMessage({input, conversationId, privacySettings, user, title}: ConversationProps) {
+export async function sendMessage({input, conversationId, privacySettings, user}: ConversationProps) {
     
     console.log(privacySettings)
     const { idToken } = user
 
     const response = await axios.post('https://orxamov415.execute-api.us-west-1.amazonaws.com/dev/chat-completion', {
-            title: title, 
             conversationId: conversationId,
             message: input 
         },  // This is your request body
