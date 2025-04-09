@@ -1,20 +1,33 @@
 import { IAppView } from "@/types/settings"
-import React, { SetStateAction } from "react"
+import React, { useState } from "react"
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid"
 
 interface IInput extends IAppView {
-    input: string,
-    setInput: React.Dispatch<SetStateAction<string>>;
-    sendMessage: () => Promise<void>
+    sendMessage: (input: string) => Promise<void>
 }
 
-export default function Input({input, setInput, sendMessage, className}: IInput) {
+export default function Input({sendMessage, className}: IInput) {
+
+    const [ input, setInput ] = useState<string>('')
+
+    const handleSubmit = async () => {
+        
+        try {
+            const tempInput = input
+            setInput('')
+            await sendMessage(tempInput)
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
 
     const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             if (input.trim()) {
-                await sendMessage();
+                handleSubmit();
             }
         }
     }
@@ -33,7 +46,7 @@ export default function Input({input, setInput, sendMessage, className}: IInput)
                 />
                 </div>
                 <button
-                    onClick={sendMessage}
+                    onClick={handleSubmit}
                     disabled={!input.trim()}
                     className="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                     <PaperAirplaneIcon className="h-5 w-5" />

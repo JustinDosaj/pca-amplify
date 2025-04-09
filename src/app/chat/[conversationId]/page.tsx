@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 const ChatPage = () => {
   
     const { conversationId } = useParams() as { conversationId: string };
-    const { input, setInput, messages, handleSendMessage, privacySettings, handleTogglePrivacy } = useChat(conversationId);
+    const { messages, handleSendMessage, privacySettings, handleTogglePrivacy } = useChat(conversationId);
     const { fetchConversations, conversations, conversationIdList } = useConversations();
     const router = useRouter();
 
@@ -42,9 +42,7 @@ const ChatPage = () => {
         
         {/* Main Chat Section */}
         <Main
-            input={input}
             messages={messages}
-            setInput={setInput}
             sendMessage={handleSendMessage}
         />
       
