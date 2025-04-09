@@ -15,9 +15,9 @@ export const useChat = (conversationId: string | null) => {
 
     const router = useRouter();
     const [messages, setMessages] = useState<IMessage[]>([]);
-    const [input, setInput] = useState('');
-    const [title, setTitle] = useState('')
-    const [isLoading, setIsLoading] = useState(false);
+    const [input, setInput] = useState<string>('');
+    const [title, setTitle] = useState<string>('New Chat')
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
       // 🧠 If there's a conversationId, load its messages
     useEffect(() => {

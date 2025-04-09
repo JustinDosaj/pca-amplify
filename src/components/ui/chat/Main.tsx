@@ -9,11 +9,12 @@ import { IMessage } from "@/types/chat";
 interface IMain extends IAppView {
     input: string,
     messages: IMessage[],
+    title: string,
     setInput: React.Dispatch<SetStateAction<string>>,
     sendMessage: () => Promise<void>
 }
 
-export default function Main({className, input, messages, setInput, sendMessage}: IMain) {
+export default function Main({className, input, messages, title, setInput, sendMessage}: IMain) {
 
     const chatContainerRef = useRef<HTMLDivElement>(null);
     
@@ -30,7 +31,7 @@ export default function Main({className, input, messages, setInput, sendMessage}
             <div className="border-b border-slate-300/40 p-4 flex justify-between items-center">
                 <div className="flex items-center">
                     <UserCircleIcon className="h-8 w-auto mr-4" />
-                    <h1 className="text-xl font-semibold text-slate-900">Chat</h1>
+                    <h1 className="text-xl font-semibold text-slate-900">{title}</h1>
                 </div>
             </div>
 
