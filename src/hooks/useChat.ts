@@ -14,7 +14,6 @@ export const useChat = (conversationId: string | null) => {
     const { user } = useAuth();
     const router = useRouter();
     const [messages, setMessages] = useState<IMessage[]>([]);
-    const [title, setTitle] = useState<string>('New Chat')
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
       // 🧠 If there's a conversationId, load its messages
@@ -29,7 +28,7 @@ export const useChat = (conversationId: string | null) => {
         loadMessages();
     }, [user, conversationId]);
 
-    const  handleSendMessage = async (input: string) => {
+    const handleSendMessage = async (input: string) => {
         
         if (!input.trim()) return;
         setIsLoading(true);
@@ -42,13 +41,13 @@ export const useChat = (conversationId: string | null) => {
         
             // New chat
             if (!conversationId) {
-                response = await sendMessage({input, privacySettings, user, conversationId, title})
+                response = await sendMessage({input, privacySettings, user, conversationId})
                 router.push(`/chat/${response.conversationId}`); // Move to new chat route
             } 
           
             // Existing chat
             else {
-                response = await sendMessage({input, privacySettings, user, conversationId, title})
+                response = await sendMessage({input, privacySettings, user, conversationId})
                 setMessages(prev => [...prev, { sender: 'bot', content: response.content }]);
             }
         } catch (e) {
@@ -75,8 +74,6 @@ export const useChat = (conversationId: string | null) => {
 
     return {
         // Chat Messages
-        title,
-        setTitle,
         messages,
         isLoading,
         handleSendMessage,
