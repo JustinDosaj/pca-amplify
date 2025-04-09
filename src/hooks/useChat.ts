@@ -12,10 +12,8 @@ export const useChat = (conversationId: string | null) => {
     }
     
     const { user } = useAuth();
-
     const router = useRouter();
     const [messages, setMessages] = useState<IMessage[]>([]);
-    const [input, setInput] = useState<string>('');
     const [title, setTitle] = useState<string>('New Chat')
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -31,31 +29,30 @@ export const useChat = (conversationId: string | null) => {
         loadMessages();
     }, [user, conversationId]);
 
-    const  handleSendMessage = async () => {
+    const  handleSendMessage = async (input: string) => {
         
         if (!input.trim()) return;
         setIsLoading(true);
     
         // Optimistic update
         setMessages(prev => [...prev, { sender: 'user', content: input }]);
-        setInput('');
     
         try {
-          let response: IResponse;
-    
-          // New chat
-          if (!conversationId) {
-            response = await sendMessage({input, privacySettings, user, conversationId, title})
-            router.push(`/chat/${response.conversationId}`); // Move to new chat route
-          } 
+            let response: IResponse;
+        
+            // New chat
+            if (!conversationId) {
+                response = await sendMessage({input, privacySettings, user, conversationId, title})
+                router.push(`/chat/${response.conversationId}`); // Move to new chat route
+            } 
           
-          // Existing chat
-          else {
-            response = await sendMessage({input, privacySettings, user, conversationId, title})
-            setMessages(prev => [...prev, { sender: 'bot', content: response.content }]);
-          }
+            // Existing chat
+            else {
+                response = await sendMessage({input, privacySettings, user, conversationId, title})
+                setMessages(prev => [...prev, { sender: 'bot', content: response.content }]);
+            }
         } catch (e) {
-          console.error('Message send error:', e);
+            console.error('Message send error:', e);
         }
     
         setIsLoading(false);
@@ -78,8 +75,6 @@ export const useChat = (conversationId: string | null) => {
 
     return {
         // Chat Messages
-        input,
-        setInput,
         title,
         setTitle,
         messages,

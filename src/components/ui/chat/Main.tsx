@@ -1,18 +1,16 @@
 import { IAppView } from "@/types/settings";
-import React, { SetStateAction, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import MarkdownEditor from '@uiw/react-markdown-editor';
 import remarkGfm from 'remark-gfm';
 import Input from "./Input";
 import { IMessage } from "@/types/chat";
 
 interface IMain extends IAppView {
-    input: string,
     messages: IMessage[],
-    setInput: React.Dispatch<SetStateAction<string>>,
-    sendMessage: () => Promise<void>
+    sendMessage: (input: string) => Promise<void>
 }
 
-export default function Main({className, input, messages, setInput, sendMessage}: IMain) {
+export default function Main({className, messages, sendMessage}: IMain) {
 
     const chatContainerRef = useRef<HTMLDivElement>(null);
     
@@ -57,11 +55,7 @@ export default function Main({className, input, messages, setInput, sendMessage}
                 ))}
             </div>
 
-            <Input 
-                input={input}
-                setInput={setInput}
-                sendMessage={sendMessage}
-            />
+            <Input sendMessage={sendMessage}/>
 
         </div>
     )
