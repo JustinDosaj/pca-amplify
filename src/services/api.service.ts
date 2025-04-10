@@ -13,7 +13,7 @@ export async function sendMessage({input, conversationId, privacySettings, user}
     console.log(privacySettings)
     const { idToken } = user
 
-    const response = await axios.post('https://orxamov415.execute-api.us-west-1.amazonaws.com/dev/chat-completion', {
+    const response = await axios.post('https://2qa1s3ihb1.execute-api.us-west-1.amazonaws.com/dev/chat', {
             conversationId: conversationId,
             message: input 
         },  // This is your request body
@@ -32,7 +32,7 @@ export async function getConversations({user}: ConversationProps) {
     
     const { idToken } = user
 
-    const response = await axios.get('https://orxamov415.execute-api.us-west-1.amazonaws.com/dev/get-conversations', { 
+    const response = await axios.get('https://2qa1s3ihb1.execute-api.us-west-1.amazonaws.com/dev/conversations', { 
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${idToken}`
@@ -48,7 +48,7 @@ export async function getMessages({user, conversationId}: ConversationProps) {
     const { idToken } = user
 
 
-    const response = await axios.get('https://orxamov415.execute-api.us-west-1.amazonaws.com/dev/get-messages', { 
+    const response = await axios.get('https://2qa1s3ihb1.execute-api.us-west-1.amazonaws.com/dev/messages', { 
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${idToken}`
