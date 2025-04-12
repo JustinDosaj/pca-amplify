@@ -7,30 +7,17 @@ import Menu from '@/components/ui/chat/Menu';
 import Main from '@/components/ui/chat/Main';
 import { useConversations } from '@/hooks/useConversations';
 import { useParams } from 'next/navigation';
-import { useRouter } from 'next/navigation';
 
 const ChatPage = () => {
   
     const { conversationId } = useParams() as { conversationId: string };
     const { messages, handleSendMessage, privacySettings, handleTogglePrivacy } = useChat(conversationId);
-    const { fetchConversations, handleDeleteConversation, handleEditConversation, conversations, conversationIdList } = useConversations();
-    const router = useRouter();
+    const { fetchConversations, handleDeleteConversation, handleEditConversation, conversations } = useConversations();
 
     // Load initial conversations
     useEffect(() => {
         fetchConversations(); 
-        
-        // Temporary method to ensuring users are only on valid urls
-        if (conversations && conversationIdList.length !== 0) {
-
-            const found = conversationIdList.find((id) => id === conversationId)
-            
-            if (!found && conversationId !== 'new') {
-                router.replace('/chat/new')
-            }
-        
-        }
-  })
+    })
 
   return (
     <div className="h-screen flex bg-white font-sans">
