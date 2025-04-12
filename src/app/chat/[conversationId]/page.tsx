@@ -13,7 +13,7 @@ const ChatPage = () => {
   
     const { conversationId } = useParams() as { conversationId: string };
     const { messages, handleSendMessage, privacySettings, handleTogglePrivacy } = useChat(conversationId);
-    const { fetchConversations, conversations, conversationIdList } = useConversations();
+    const { fetchConversations, handleDeleteConversation, conversations, conversationIdList } = useConversations();
     const router = useRouter();
 
     // Load initial conversations
@@ -37,7 +37,8 @@ const ChatPage = () => {
         {/* Left Sidebar */}
         <Menu 
             conversations={conversations}
-            className="w-[15vw]"  
+            className="w-[15vw]"
+            handleDeleteConversation={handleDeleteConversation}  
         />
         
         {/* Main Chat Section */}
