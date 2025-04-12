@@ -13,7 +13,7 @@ const ChatPage = () => {
   
     const { conversationId } = useParams() as { conversationId: string };
     const { messages, handleSendMessage, privacySettings, handleTogglePrivacy } = useChat(conversationId);
-    const { fetchConversations, handleDeleteConversation, conversations, conversationIdList } = useConversations();
+    const { fetchConversations, handleDeleteConversation, handleEditConversation, conversations, conversationIdList } = useConversations();
     const router = useRouter();
 
     // Load initial conversations
@@ -39,6 +39,7 @@ const ChatPage = () => {
             conversations={conversations}
             className="w-[15vw]"
             handleDeleteConversation={handleDeleteConversation}  
+            handleEditConversation={handleEditConversation}
         />
         
         {/* Main Chat Section */}

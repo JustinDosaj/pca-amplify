@@ -6,6 +6,7 @@ interface ConversationProps {
     conversationId?: string | null,
     input?: string,
     privacySettings?: Record<string, boolean>
+    title?: string,
 }
 
 export async function sendMessage({input, conversationId, privacySettings, user}: ConversationProps) {
@@ -64,14 +65,32 @@ export async function getConversations({user}: ConversationProps) {
 }
 
 export async function deleteConversation({user, conversationId}: ConversationProps) {
+
     const { idToken } = user
-    console.log("conversationId: ", conversationId)
     const response = await axios.delete(`https://2qa1s3ihb1.execute-api.us-west-1.amazonaws.com/dev/conversations/${conversationId}`, { 
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${idToken}`
         }
     });
+
+    return response.data?.success || ''
+    
+}
+
+export async function editConversation({user, conversationId, title}: ConversationProps) {
+
+    const { idToken } = user
+    const response = await axios.put(`https://2qa1s3ihb1.execute-api.us-west-1.amazonaws.com/dev/conversations/${conversationId}`, {
+            title: title,
+        },
+        {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${idToken}`
+            }
+        },
+    )
 
     return response.data?.success || ''
     

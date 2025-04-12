@@ -7,6 +7,11 @@ export interface IConversations {
     title: string,
 }
 
+export interface IEdit {
+    title: string,
+    conversationId: string,
+}
+
 export interface IMessage {
     sender: 'user' | 'bot',
     content: string,
