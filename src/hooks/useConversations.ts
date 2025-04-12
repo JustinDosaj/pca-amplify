@@ -28,7 +28,6 @@ export const useConversations = () => {
         try {
             // Delete conversation from DynamoDB
             await deleteConversation({user, conversationId})
-        
 
         } catch (error) {
             console.log(error)

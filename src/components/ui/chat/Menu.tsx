@@ -7,17 +7,16 @@ import { Button } from "../Button"
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid"
 import { ConversationDropdown } from "./DropDown"
 import { useState, useEffect } from "react"
-import { useConversations } from "@/hooks/useConversations"
 
 interface IMenu extends IAppView {
     conversations: IConversations[] | null
+    handleDeleteConversation: (conversationId: string) => Promise<void>
 }
 
-export default function Menu({className, conversations}: IMenu) {
+export default function Menu({className, conversations, handleDeleteConversation}: IMenu) {
 
     const router = useRouter()
     const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
-    const { handleDeleteConversation } = useConversations();
 
     const toggleDropdown = (e: React.MouseEvent, id: string) => {
         e.stopPropagation()
