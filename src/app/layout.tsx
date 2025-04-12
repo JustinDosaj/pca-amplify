@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Lexend } from 'next/font/google'
 import "./globals.css";
 import { AuthProvider } from "@/providers/auth.providers";
+import { ConversationsProvider } from "@/providers/conversations.providers";
 import clsx from "clsx";
 
 import '@/styles/tailwind.css'
@@ -34,7 +35,9 @@ export default function RootLayout({
       'h-full scroll-smooth bg-white antialiased', inter.variable, lexend.variable )}>
           <body className={'flex h-full flex-col'}>
             <AuthProvider>
-              {children}
+              <ConversationsProvider>
+                {children}
+              </ConversationsProvider>
             </AuthProvider>
           </body>
     </html>

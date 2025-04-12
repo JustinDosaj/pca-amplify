@@ -35,26 +35,26 @@ const ChatPage = () => {
   return (
     <div className="h-screen flex bg-white font-sans">
         {/* Left Sidebar */}
-        <Menu 
-            conversations={conversations}
-            className="w-[15vw]"
-            handleDeleteConversation={handleDeleteConversation}  
-            handleEditConversation={handleEditConversation}
-        />
+
+            <Menu 
+                conversations={conversations}
+                className="w-[15vw]"
+                handleDeleteConversation={handleDeleteConversation}  
+                handleEditConversation={handleEditConversation}
+            />
+            
+            {/* Main Chat Section */}
+            <Main
+                messages={messages}
+                sendMessage={handleSendMessage}
+            />
         
-        {/* Main Chat Section */}
-        <Main
-            messages={messages}
-            sendMessage={handleSendMessage}
-        />
-      
-        {/* Right Sidebar */}
-        <Settings 
-            privacySettings={privacySettings} 
-            onTogglePrivacy={handleTogglePrivacy}
-            className="w-[30vw]"
-        />
-   
+            {/* Right Sidebar */}
+            <Settings 
+                privacySettings={privacySettings} 
+                onTogglePrivacy={handleTogglePrivacy}
+                className="w-[30vw]"
+            />
     </div>
   );
 };
