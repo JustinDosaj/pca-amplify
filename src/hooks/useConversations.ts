@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useAuth } from "./useAuth";
-import { getConversations, deleteConversation } from "@/services/api.service";
-import { IConversations } from "@/types/chat";
+import { getConversations, deleteConversation, editConversation } from "@/services/api.service";
+import { IConversations, IEdit } from "@/types/chat";
 
 export const useConversations = () => {
 
@@ -35,10 +35,19 @@ export const useConversations = () => {
 
     }
 
+    const handleEditConversation = async ({title, conversationId}: IEdit) => {
+        try {
+            await editConversation({user, conversationId, title})
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return {
         conversations,
         conversationIdList,
         fetchConversations,
-        handleDeleteConversation
+        handleDeleteConversation,
+        handleEditConversation
     }
 }
