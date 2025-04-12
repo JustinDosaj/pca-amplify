@@ -28,20 +28,6 @@ export async function sendMessage({input, conversationId, privacySettings, user}
     return response.data || ''
 }
 
-export async function getConversations({user}: ConversationProps) {
-    
-    const { idToken } = user
-
-    const response = await axios.get('https://2qa1s3ihb1.execute-api.us-west-1.amazonaws.com/dev/conversations', { 
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${idToken}`
-        }
-    });
-
-    return response.data?.conversations || ''
-
-}
   
 export async function getMessages({user, conversationId}: ConversationProps) {
     
@@ -60,4 +46,33 @@ export async function getMessages({user, conversationId}: ConversationProps) {
 
     return response.data?.messages || ''
 
+}
+
+export async function getConversations({user}: ConversationProps) {
+    
+    const { idToken } = user
+
+    const response = await axios.get('https://2qa1s3ihb1.execute-api.us-west-1.amazonaws.com/dev/conversations', { 
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${idToken}`
+        }
+    });
+
+    return response.data?.conversations || ''
+
+}
+
+export async function deleteConversation({user, conversationId}: ConversationProps) {
+    const { idToken } = user
+    console.log("conversationId: ", conversationId)
+    const response = await axios.delete(`https://2qa1s3ihb1.execute-api.us-west-1.amazonaws.com/dev/conversations/${conversationId}`, { 
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${idToken}`
+        }
+    });
+
+    return response.data?.success || ''
+    
 }

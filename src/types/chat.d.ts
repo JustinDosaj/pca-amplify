@@ -1,4 +1,4 @@
-export interface IConversationsList {
+export interface IConversations {
     conversationId: string,
     createdAt: number,
     lastUpdated: number,

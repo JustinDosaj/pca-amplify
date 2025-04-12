@@ -1,5 +1,5 @@
 import { IAppView } from "@/types/settings"
-import { IConversationsList } from "@/types/chat"
+import { IConversations } from "@/types/chat"
 import React from "react"
 import { useRouter } from "next/navigation"
 import { PlusIcon } from "@heroicons/react/24/solid"
@@ -7,15 +7,17 @@ import { Button } from "../Button"
 import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid"
 import { ConversationDropdown } from "./DropDown"
 import { useState, useEffect } from "react"
+import { useConversations } from "@/hooks/useConversations"
 
 interface IMenu extends IAppView {
-    conversations: IConversationsList[] | null
+    conversations: IConversations[] | null
 }
 
 export default function Menu({className, conversations}: IMenu) {
 
     const router = useRouter()
     const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
+    const { handleDeleteConversation } = useConversations();
 
     const toggleDropdown = (e: React.MouseEvent, id: string) => {
         e.stopPropagation()
@@ -29,11 +31,12 @@ export default function Menu({className, conversations}: IMenu) {
         // Add edit logic
     }
 
-    const handleDelete = (e: React.MouseEvent, id: string) => {
+    const handleDelete = async (e: React.MouseEvent, id: string) => {
         e.stopPropagation()
         console.log("Delete:", id)
+        await handleDeleteConversation(id)
         setOpenDropdownId(null)
-        // Add delete logic
+
     }
 
     // Setup global click handler
