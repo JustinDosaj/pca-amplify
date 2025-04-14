@@ -1,9 +1,12 @@
 import { IAppView } from "@/types/settings";
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MarkdownEditor from '@uiw/react-markdown-editor';
 import remarkGfm from 'remark-gfm';
 import Input from "./Input";
 import { IMessage } from "@/types/chat";
+import { ChevronDownIcon } from "@heroicons/react/24/solid";
+import { ModelDropDown } from "./DropDown";
+import { useConversations } from "@/hooks/useConversations";
 
 interface IMain extends IAppView {
     messages: IMessage[],
@@ -13,6 +16,37 @@ interface IMain extends IAppView {
 export default function Main({className, messages, sendMessage}: IMain) {
 
     const chatContainerRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const [showModelDropdown, setShowModelDropdown] = useState(false);
+    const { model, setModel } = useConversations()
+
+
+    // Toggle dropdown open/close
+    const toggleDropdown = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setShowModelDropdown(prev => !prev);
+    };
+
+    const selectModel = (e: React.MouseEvent, newModel: string) => {
+        e.stopPropagation();
+        setModel(newModel)
+        toggleDropdown(e);
+    }
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target as Node)
+            ) {
+                setShowModelDropdown(false);
+            }
+        };
+
+        window.addEventListener('click', handleClickOutside);
+        return () => window.removeEventListener('click', handleClickOutside);
+    }, []);
     
     // Auto-scroll to bottom when messages update
     useEffect(() => {
@@ -25,8 +59,17 @@ export default function Main({className, messages, sendMessage}: IMain) {
         <div className={`${className} flex flex-col flex-1 bg-white`}>
             {/* Header */}
             <div className="border-b border-slate-300/40 p-4 flex justify-between items-center">
-                <div className="flex items-center">
-                    <h1 className="text-xl font-semibold text-slate-900">Other Stuff like settings can go up here</h1>
+                <div className="flex justify-center w-full items-center space-x-1 text-slate-900 relative">
+                    <span>{model}</span>
+                    <ChevronDownIcon
+                        onClick={toggleDropdown}
+                        className="h-4 mt-0.5 hover:cursor-pointer hover:text-slate-700"
+                    />
+                    {showModelDropdown && (
+                        <div ref={dropdownRef} className="absolute top-full z-50">
+                            <ModelDropDown selectModel={selectModel}/>
+                        </div>
+                    )}
                 </div>
             </div>
 
