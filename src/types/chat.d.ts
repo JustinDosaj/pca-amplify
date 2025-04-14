@@ -1,3 +1,5 @@
+import { IconType } from "react-icons/lib"
+
 export interface IConversations {
     conversationId: string,
     createdAt: number,
@@ -20,4 +22,15 @@ export interface IMessage {
 export interface IResponse {
     content: string,
     conversationId: string,
+}
+
+export type ChatModelOption = {
+    name: string,
+    value: string,
+}
+
+export type ChatModelGroup = {
+    label: string,
+    icon: IconType,
+    models: ChatModelOption[]
 }

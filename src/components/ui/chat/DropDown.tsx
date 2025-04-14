@@ -1,5 +1,6 @@
 import React from "react"
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/solid"
+import { LLM_MODELS } from "@/config/constants.config"
 
 
 interface ConversationDropdownProps {
@@ -44,3 +45,31 @@ export const ConversationDropdown = ({ onEdit, onDelete }: ConversationDropdownP
         </div>
     )
 }
+
+
+interface IModelDropDown {
+    selectModel: (e: React.MouseEvent, newModel: string) => void
+}
+
+export const ModelDropDown = ({selectModel}: IModelDropDown) => {
+
+    return (
+        <div
+            className="mt-2 w-48 bg-white border border-slate-200 rounded-md shadow-md py-1 z-50"
+            onClick={(e) => e.stopPropagation()}
+        >
+            {LLM_MODELS.map((company) =>
+                company.models.map((model, index) => (
+                    <div
+                        key={model.value || index}
+                        className="flex items-center gap-2 px-2 py-1 hover:bg-slate-100 cursor-pointer"
+                        onClick={(e) => {selectModel(e, model.name)}}
+                    >
+                        <company.icon className="h-4 w-4" />
+                        <span className="text-sm">{model.name}</span>
+                    </div>
+                ))
+            )}
+        </div>
+    );
+};

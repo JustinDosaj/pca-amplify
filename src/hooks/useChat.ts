@@ -16,10 +16,9 @@ export const useChat = (conversationId: string | null) => {
     const [messages, setMessages] = useState<IMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-      // 🧠 If there's a conversationId, load its messages
+    // If there's a conversationId, load its messages
     useEffect(() => {
         if (!conversationId || !user ) return;
-
             const loadMessages = async () => {
             const response = await getMessages({user, conversationId})
             setMessages(response || []);

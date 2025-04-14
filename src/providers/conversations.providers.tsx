@@ -9,6 +9,8 @@ interface IConversationContext {
     fetchConversations: () => void,
     handleDeleteConversation: (conversationId: string) => Promise<void>,
     handleEditConversation: ({title, conversationId}: IEdit) => Promise<void>,
+    setModel: React.Dispatch<React.SetStateAction<string>>,
+    model: string,
     conversations: IConversations[],
     conversationIdList: string[],
 }
@@ -20,6 +22,7 @@ export const ConversationsProvider: React.FC<{children: ReactNode}> = ({children
     const { user } = useAuth();
     const [ conversations, setConversations ] = useState<IConversations[]>([])
     const [ conversationIdList, setConversationIdList] = useState<string[]>([])
+    const [ model, setModel ] = useState<string>("gpt-3.5-turbo")
 
     const fetchConversations = async () => {
         if (user && conversations.length === 0) {
@@ -61,7 +64,7 @@ export const ConversationsProvider: React.FC<{children: ReactNode}> = ({children
     }
 
     return (
-    <ConversationsContext.Provider value={{fetchConversations, handleDeleteConversation, handleEditConversation, conversations, conversationIdList}}>
+    <ConversationsContext.Provider value={{fetchConversations, handleDeleteConversation, handleEditConversation, setModel, model, conversations, conversationIdList}}>
         {children}
     </ConversationsContext.Provider>
     )
