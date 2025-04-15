@@ -4,6 +4,7 @@ import React, { createContext, useState, ReactNode } from "react";
 import { getConversations, deleteConversation, editConversation } from "@/services/api.service";
 import { IConversations, IEdit } from "@/types/chat";
 import { useAuth } from "@/hooks/useAuth";
+import { Notify } from "@/hooks/useNotify";
 
 interface IConversationContext {
     fetchConversations: () => void,
@@ -22,7 +23,7 @@ export const ConversationsProvider: React.FC<{children: ReactNode}> = ({children
     const { user } = useAuth();
     const [ conversations, setConversations ] = useState<IConversations[]>([])
     const [ conversationIdList, setConversationIdList] = useState<string[]>([])
-    const [ model, setModel ] = useState<string>("gpt-3.5-turbo")
+    const [ model, setModel ] = useState<string>("GPT-3.5 Turbo")
 
     const fetchConversations = async () => {
         if (user && conversations.length === 0) {
@@ -40,7 +41,7 @@ export const ConversationsProvider: React.FC<{children: ReactNode}> = ({children
 
         try {
             // Delete conversation from DynamoDB
-            await deleteConversation({user, conversationId})
+            await deleteConversation({user, conversationId}).then(() => Notify("Conversation deleted!"))
             setConversations((prev) => prev.filter(con => con.conversationId !== conversationId));
             setConversationIdList((prev) => prev.filter(id => id !== conversationId));    
 
@@ -52,7 +53,7 @@ export const ConversationsProvider: React.FC<{children: ReactNode}> = ({children
 
     const handleEditConversation = async ({title, conversationId}: IEdit) => {
         try {
-            await editConversation({user, conversationId, title})
+            await editConversation({user, conversationId, title}).then(() => Notify("Conversation title successfully updated!"))
             setConversations((prev) =>
                 prev.map((con) =>
                   con.conversationId === conversationId ? { ...con, title } : con
