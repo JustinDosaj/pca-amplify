@@ -16,8 +16,8 @@ const ChatPage = () => {
 
     // Load initial conversations
     useEffect(() => {
-        fetchConversations(); 
-    })
+        fetchConversations();
+    },[fetchConversations])
 
   return (
     <div className="h-screen flex bg-white font-sans">

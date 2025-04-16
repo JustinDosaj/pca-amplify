@@ -26,7 +26,7 @@ export const ConversationsProvider: React.FC<{children: ReactNode}> = ({children
     const [ model, setModel ] = useState<string>("GPT-3.5 Turbo")
 
     const fetchConversations = async () => {
-        if (user && conversations.length === 0) {
+        if (user) {
             const data = await getConversations({user})
 
             // Extract and set all conversation ids to validate url param

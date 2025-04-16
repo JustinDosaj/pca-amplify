@@ -4,6 +4,7 @@ import { getMessages, sendMessage } from "@/services/api.service";
 import { useAuth } from "./useAuth";
 import { IMessage, IResponse } from "@/types/chat";
 import { useRouter } from "next/navigation";
+//import { useConversations } from "./useConversations";
 
 export const useChat = (conversationId: string | null) => {
 
@@ -12,6 +13,7 @@ export const useChat = (conversationId: string | null) => {
     }
     
     const { user } = useAuth();
+    //const { fetchConversations } = useConversations();
     const router = useRouter();
     const [messages, setMessages] = useState<IMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -41,7 +43,8 @@ export const useChat = (conversationId: string | null) => {
             // New chat
             if (!conversationId) {
                 response = await sendMessage({input, privacySettings, user, conversationId})
-                router.push(`/chat/${response.conversationId}`); // Move to new chat route
+                //await fetchConversations();
+                router.replace(`/chat/${response.conversationId}`); // Move to new chat route
             } 
           
             // Existing chat
