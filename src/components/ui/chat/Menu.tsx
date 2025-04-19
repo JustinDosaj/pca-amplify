@@ -80,7 +80,7 @@ export default function Menu({className, conversations, handleDeleteConversation
     }, [openDropdownId])
 
     return (
-        <div className={`${className} border-r border-slate-300/40 p-6 bg-slate-50`}>
+        <div className={`${className} border-r border-slate-300/40 p-6 bg-slate-50 overflow-y-scroll`}>
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold text-slate-900">Menu</h2>
                 <Button onClick={() => router.replace('/chat/new')} color="white" variant="outline">
