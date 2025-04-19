@@ -8,6 +8,7 @@ import Main from '@/components/ui/chat/Main';
 import { useConversations } from '@/hooks/useConversations';
 import { useParams } from 'next/navigation';
 import { Bars3Icon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline';
+import { SelectModel } from '@/components/ui/chat/SelectModel';
 
 const ChatPage = () => {
   const { conversationId } = useParams() as { conversationId: string };
@@ -29,6 +30,7 @@ const ChatPage = () => {
         <button onClick={() => setShowMenu(true)} aria-label="Open menu">
           <Bars3Icon className="h-6 w-6 text-slate-700" />
         </button>
+        <SelectModel/>
         <button onClick={() => setShowSettings(true)} aria-label="Open settings">
           <AdjustmentsHorizontalIcon className="h-6 w-6 text-slate-700" />
         </button>
@@ -37,10 +39,10 @@ const ChatPage = () => {
         {/* Sidebar Menu (left) */}
         <div className={`fixed md:static z-40 bg-slate-50 h-full transition-transform duration-300 md:translate-x-0 ${showMenu ? 'translate-x-0' : '-translate-x-full'} md:w-[15vw] w-64`}>
             <Menu 
-            conversations={conversations}
-            className="h-full"
-            handleDeleteConversation={handleDeleteConversation}
-            handleEditConversation={handleEditConversation}
+              conversations={conversations}
+              className="h-full"
+              handleDeleteConversation={handleDeleteConversation}
+              handleEditConversation={handleEditConversation}
             />
         </div>
 
@@ -57,7 +59,7 @@ const ChatPage = () => {
       
 
       {/* Settings (right) */}
-      <div className={`fixed md:static z-40 bg-white h-full border-l border-slate-200 transition-transform duration-300 md:translate-x-0 ${showSettings ? 'translate-x-0' : 'translate-x-full'} md:w-[30vw]`}>
+      <div className={`fixed md:static z-40 bg-slate-50 h-full top-0 right-0 transition-transform duration-300 transform ${showSettings ? 'translate-x-0' : 'translate-x-full'} w-80 md:w-[30vw] md:translate-x-0`}>
         <Settings 
           privacySettings={privacySettings} 
           onTogglePrivacy={handleTogglePrivacy}
