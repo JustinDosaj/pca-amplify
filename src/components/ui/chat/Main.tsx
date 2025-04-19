@@ -58,7 +58,7 @@ export default function Main({className, messages, sendMessage}: IMain) {
     return (
         <div className={`${className} flex flex-col flex-1 bg-white`}>
             {/* Header */}
-            <div className="border-b border-slate-300/40 p-4 flex justify-between items-center">
+            <div className="flex border-b border-slate-300/40 p-4 justify-between items-center">
                 <div className="flex justify-center w-full items-center space-x-1 text-slate-900 relative">
                     <span>{model}</span>
                     <ChevronDownIcon

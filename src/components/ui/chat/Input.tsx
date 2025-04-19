@@ -41,7 +41,7 @@ export default function Input({ sendMessage, className }: IInput) {
     }, [input]);
 
     return (
-        <div className={`${className} p-4 border-t border-slate-300/40`}>
+        <div className={`${className} p-4 border rounded-xl border-slate-300/40 shadow-xl`}>
             <div className="flex items-end space-x-4">
                 <div className="flex-1">
                     <textarea
