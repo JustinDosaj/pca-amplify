@@ -23,7 +23,7 @@ export default function Main({className, messages, sendMessage}: IMain) {
     }, [messages]);
     
     return (
-        <div className={`${className} flex flex-col flex-1 bg-white`}>
+        <div className={`${className} h-screen overflow-hidden flex flex-col flex-1 bg-white`}>
             {/* Header */}
             <SelectModel className="hidden md:flex border-b border-slate-300/40 p-4"/>
 
