@@ -14,7 +14,7 @@ export async function sendMessage({input, conversationId, privacySettings, user}
     console.log(privacySettings)
     const { idToken } = user
 
-    const response = await axios.post('https://2qa1s3ihb1.execute-api.us-west-1.amazonaws.com/dev/chat', {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_CHAT_API_ROUTE}/chat`, {
             conversationId: conversationId,
             message: input 
         },  // This is your request body
@@ -35,7 +35,7 @@ export async function getMessages({user, conversationId}: ConversationProps) {
     const { idToken } = user
 
 
-    const response = await axios.get('https://2qa1s3ihb1.execute-api.us-west-1.amazonaws.com/dev/messages', { 
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_CHAT_API_ROUTE}/messages`, { 
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${idToken}`
@@ -53,7 +53,7 @@ export async function getConversations({user}: ConversationProps) {
     
     const { idToken } = user
 
-    const response = await axios.get('https://2qa1s3ihb1.execute-api.us-west-1.amazonaws.com/dev/conversations', { 
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_CHAT_API_ROUTE}/conversations`, { 
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${idToken}`
@@ -67,7 +67,7 @@ export async function getConversations({user}: ConversationProps) {
 export async function deleteConversation({user, conversationId}: ConversationProps) {
 
     const { idToken } = user
-    const response = await axios.delete(`https://2qa1s3ihb1.execute-api.us-west-1.amazonaws.com/dev/conversations/${conversationId}`, { 
+    const response = await axios.delete(`${process.env.NEXT_PUBLIC_CHAT_API_ROUTE}/conversations/${conversationId}`, { 
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${idToken}`
@@ -81,7 +81,7 @@ export async function deleteConversation({user, conversationId}: ConversationPro
 export async function editConversation({user, conversationId, title}: ConversationProps) {
 
     const { idToken } = user
-    const response = await axios.put(`https://2qa1s3ihb1.execute-api.us-west-1.amazonaws.com/dev/conversations/${conversationId}`, {
+    const response = await axios.put(`${process.env.NEXT_PUBLIC_CHAT_API_ROUTE}/conversations/${conversationId}`, {
             title: title,
         },
         {
