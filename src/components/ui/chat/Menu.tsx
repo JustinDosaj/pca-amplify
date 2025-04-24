@@ -1,5 +1,4 @@
 import { IAppView } from "@/types/settings"
-import { IConversations, IEdit } from "@/types/chat"
 import React from "react"
 import { useRouter } from "next/navigation"
 import { PlusIcon } from "@heroicons/react/24/solid"
@@ -7,19 +6,16 @@ import { Button } from "../Button"
 import { EllipsisHorizontalIcon, CheckIcon, XMarkIcon } from "@heroicons/react/24/solid"
 import { ConversationDropdown } from "./DropDown"
 import { useState, useEffect } from "react"
+import { useConversations } from "@/hooks/useConversations"
 
-interface IMenu extends IAppView {
-    conversations: IConversations[] | null
-    handleDeleteConversation: (conversationId: string) => Promise<void>
-    handleEditConversation: ({title, conversationId}: IEdit) => Promise<void>
-}
-
-export default function Menu({className, conversations, handleDeleteConversation, handleEditConversation}: IMenu) {
+export default function Menu({ className }: IAppView) {
 
     const router = useRouter()
     const [openDropdownId, setOpenDropdownId] = useState<string | null>(null)
     const [editingId, setEditingId] = useState<string | null>(null)
     const [newTitle, setNewTitle] = useState<string>('')
+    
+    const { handleDeleteConversation, handleEditConversation, conversations } = useConversations();
 
     const toggleDropdown = (e: React.MouseEvent, id: string) => {
         e.stopPropagation()

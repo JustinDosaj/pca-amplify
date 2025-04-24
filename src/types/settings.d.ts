@@ -5,4 +5,5 @@ export interface ISettingsList {
 
 export interface IAppView {
     className?: string,
+    conversationId?: string | null,
 }

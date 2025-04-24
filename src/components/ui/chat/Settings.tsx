@@ -1,13 +1,11 @@
 import { PII_TYPE_OPTIONS } from "@/config/options.config"
 import { IAppView } from "@/types/settings";
+import { useChat } from "@/hooks/useChat";
 
-interface ISettings extends IAppView {
-    privacySettings: Record<string, boolean>;
-    onTogglePrivacy: (entity: string) => void;
-}
-
-export default function Settings({privacySettings, onTogglePrivacy, className }: ISettings) {
+export default function Settings({ className, conversationId }: IAppView) {
     
+    const { privacySettings, handleTogglePrivacy } = useChat(conversationId);
+
     return (
         <div className={`${className} border-l border-slate-300/40 p-6 bg-slate-50 overflow-y-scroll`}>
             <fieldset>
@@ -24,7 +22,7 @@ export default function Settings({privacySettings, onTogglePrivacy, className }:
                                     checked={privacySettings[type.entity]}
                                     type="checkbox"
                                     className="col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:bg-blue-600 indeterminate:bg-blue-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                                    onChange={() => onTogglePrivacy(type.entity)}
+                                    onChange={() => handleTogglePrivacy(type.entity)}
                                 />
                             </div>
                         </div>

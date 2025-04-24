@@ -6,7 +6,7 @@ import { IMessage, IResponse } from "@/types/chat";
 import { useRouter } from "next/navigation";
 //import { useConversations } from "./useConversations";
 
-export const useChat = (conversationId: string | null) => {
+export const useChat = (conversationId: string | null | undefined) => {
 
     if (conversationId == 'new') {
         conversationId = null

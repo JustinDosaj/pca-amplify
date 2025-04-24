@@ -3,18 +3,14 @@ import React, { useEffect, useRef } from 'react';
 import MarkdownEditor from '@uiw/react-markdown-editor';
 import remarkGfm from 'remark-gfm';
 import Input from "./Input";
-import { IMessage } from "@/types/chat";
 import { SelectModel } from "./SelectModel";
+import { useChat } from "@/hooks/useChat";
 
-interface IMain extends IAppView {
-    messages: IMessage[],
-    sendMessage: (input: string) => Promise<void>
-}
+export default function Main({className, conversationId}: IAppView) {
 
-export default function Main({className, messages, sendMessage}: IMain) {
-
+    const { messages } = useChat(conversationId);
     const chatContainerRef = useRef<HTMLDivElement>(null);
-    
+
     // Auto-scroll to bottom when messages update
     useEffect(() => {
         if (chatContainerRef.current) {
@@ -52,7 +48,7 @@ export default function Main({className, messages, sendMessage}: IMain) {
                 ))}
             </div>
 
-            <Input sendMessage={sendMessage}/>
+            <Input conversationId={conversationId}/>
 
         </div>
     )
