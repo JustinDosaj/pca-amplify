@@ -13,9 +13,12 @@ const createJestConfig = nextJest({
 const config: Config = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   clearMocks: true,
-  collectCoverage: true,
+  collectCoverage: false,
   coverageDirectory: "coverage",
   testEnvironment: "jsdom",
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
 };
 
 export default createJestConfig(config);

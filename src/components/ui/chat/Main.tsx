@@ -48,7 +48,7 @@ export default function Main({className, conversationId}: IAppView) {
                 ))}
             </div>
 
-            <Input/>
+            <Input conversationId={conversationId}/>
 
         </div>
     )
