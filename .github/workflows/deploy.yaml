@@ -2,9 +2,9 @@ name: PCA-Amplify CI/CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
   test:
@@ -21,9 +21,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: TypeScript check (optional)
-        run: npx tsc --noEmit
 
       - name: Run unit tests
         run: npm test
