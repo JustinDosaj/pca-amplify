@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useChat } from '@/hooks/useChat';
 import Settings from '@/components/ui/chat/Settings';
 import Menu from '@/components/ui/chat/Menu';
 import Main from '@/components/ui/chat/Main';
@@ -11,12 +10,10 @@ import { Bars3Icon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outlin
 import { SelectModel } from '@/components/ui/chat/SelectModel';
 
 const ChatPage = () => {
-  const { conversationId } = useParams() as { conversationId: string };
-  const { messages, handleSendMessage, privacySettings, handleTogglePrivacy } = useChat(conversationId);
-  const { fetchConversations, handleDeleteConversation, handleEditConversation, conversations } = useConversations();
-
-  const [showMenu, setShowMenu] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
+    const { conversationId } = useParams() as { conversationId: string };
+    const { fetchConversations } = useConversations();
+    const [showMenu, setShowMenu] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
     fetchConversations();
@@ -39,10 +36,8 @@ const ChatPage = () => {
         {/* Sidebar Menu (left) */}
         <div className={`fixed md:static z-40 bg-slate-50 h-full transition-transform duration-300 md:translate-x-0 ${showMenu ? 'translate-x-0' : '-translate-x-full'} md:w-[15vw] w-64`}>
             <Menu 
-              conversations={conversations}
-              className="h-full"
-              handleDeleteConversation={handleDeleteConversation}
-              handleEditConversation={handleEditConversation}
+                className="h-full"
+                conversationId={conversationId}
             />
         </div>
 
@@ -52,18 +47,14 @@ const ChatPage = () => {
         )}
 
         {/* Main Chat Area */}
-        <Main
-            messages={messages}
-            sendMessage={handleSendMessage}
-        />
+        <Main conversationId={conversationId}/>
       
 
       {/* Settings (right) */}
       <div className={`fixed md:static z-40 bg-slate-50 h-full top-0 right-0 transition-transform duration-300 transform ${showSettings ? 'translate-x-0' : 'translate-x-full'} w-80 md:w-[30vw] md:translate-x-0`}>
         <Settings 
-          privacySettings={privacySettings} 
-          onTogglePrivacy={handleTogglePrivacy}
-          className="h-full"
+            className="h-full"
+            conversationId={conversationId}
         />
       </div>
 

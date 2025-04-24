@@ -1,12 +1,13 @@
 import { IAppView } from "@/types/settings"
 import React, { useEffect, useRef, useState } from "react"
 import { PaperAirplaneIcon } from "@heroicons/react/24/solid"
+import { useChat } from "@/hooks/useChat";
+import { useParams } from "next/navigation";
 
-interface IInput extends IAppView {
-    sendMessage: (input: string) => Promise<void>
-}
-
-export default function Input({ sendMessage, className }: IInput) {
+export default function Input({className }: IAppView) {
+    
+    const { conversationId } = useParams() as { conversationId: string };
+    const { handleSendMessage } = useChat(conversationId)
     const [input, setInput] = useState<string>('');
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -14,7 +15,7 @@ export default function Input({ sendMessage, className }: IInput) {
         try {
             const tempInput = input;
             setInput('');
-            await sendMessage(tempInput);
+            await handleSendMessage(tempInput);
             if (textareaRef.current) {
                 textareaRef.current.style.height = "auto"; // Reset height after sending
             }
