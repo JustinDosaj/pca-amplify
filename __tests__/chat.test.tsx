@@ -2,27 +2,36 @@ import React from 'react'
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import Input from '@/components/ui/chat/Input'
 
-// Mock useChat hook
-jest.mock('@/hooks/useChat', () => ({
-  useChat: () => ({
-    handleSendMessage: jest.fn(() => Promise.resolve()), // resolve immediately
-  }),
-}))
+jest.mock('@/hooks/useChat', () => {
 
-describe('Input component', () => {
-  it('clears the textarea after submitting a message', async () => {
-    render(<Input conversationId="123" />)
+    const mockMessages = [
+        { sender: 'user', content: 'Mock LLM Message' },
+        { sender: 'bot', content: 'This is a mock bot response.' }
+    ]
 
-    const textarea = screen.getByPlaceholderText('Type a message...')
-    const sendButton = screen.getByRole('button')
+    return {
+        useChat: () => ({
+            handleSendMessage: jest.fn(() => Promise.resolve()), // resolve immediately
+            messages: mockMessages,
+        })
+    }
 
-    fireEvent.change(textarea, { target: { value: 'Mock LLM Message' } })
-    expect(textarea).toHaveValue('Mock LLM Message')
+})
 
-    fireEvent.click(sendButton)
+describe('Input Button', () => {
+    it('clears the textarea after submitting a message', async () => {
+        render(<Input conversationId="123" />)
 
-    await waitFor(() => {
-      expect(textarea).toHaveValue('') // cleared after submit
+        const textarea = screen.getByPlaceholderText('Type a message...')
+        const sendButton = screen.getByRole('button')
+
+        fireEvent.change(textarea, { target: { value: 'Mock LLM Message' } })
+        expect(textarea).toHaveValue('Mock LLM Message')
+
+        fireEvent.click(sendButton)
+
+        await waitFor(() => {
+            expect(textarea).toHaveValue('') // cleared after submit
+        })
     })
-  })
 })
