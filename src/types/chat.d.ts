@@ -2,11 +2,11 @@ import { IconType } from "react-icons/lib"
 
 export interface IConversations {
     conversationId: string,
+    title: string,
     createdAt: number,
     lastUpdated: number,
     type: string,
     userId: string,
-    title: string,
 }
 
 export interface IEdit {
