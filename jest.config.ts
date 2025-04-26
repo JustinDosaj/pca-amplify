@@ -16,6 +16,9 @@ const config: Config = {
   collectCoverage: false,
   coverageDirectory: "coverage",
   testEnvironment: "jsdom",
+  testEnvironmentOptions: {
+    customExportConditions: [''],
+  },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
