@@ -118,7 +118,8 @@ export default function Menu({ className }: IAppView) {
                             <>
                                 <span className="truncate">{item.title}</span>
                                 <div className="relative">
-                                    <EllipsisHorizontalIcon 
+                                    <EllipsisHorizontalIcon
+                                        aria-label="conversation-options" 
                                         className="h-5 w-5 text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" 
                                         onClick={(e) => toggleDropdown(e, item.conversationId)}
                                     />
