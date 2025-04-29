@@ -35,6 +35,7 @@ Before you begin, make sure you have the following installed:
 
 - [Node.js](https://nodejs.org/) (LTS version recommended)
 - [npm](https://www.npmjs.com/) (comes with Node.js)
+- [pca-serverless](https://github.com/JustinDosaj/pca-serverless) (Set up your own supporting infrastructure)
 
 ### Steps to Install
 
@@ -57,8 +58,23 @@ npm install
 ```bash
 NEXT_PUBLIC_API_ENDPOINT=https://<your-api-gateway-url>.amazonaws.com/<env>/
 ```
+5. Run Tests to Confirm Installation
+```bash
+npm test
+``` 
 
-5. Run Development Server
+6. Run Development Server
 ```bash
 npm run dev
 ```
+
+## Using the Chat App
+The chat application requires a valid JWT to authorize API calls, please following the [AWS Amplify Setup Instructions](https://docs.amplify.aws/react/start/quickstart/) to setup hosting and authentication to get conversations to work. Alternatively, you can entirely remove the authorization requirement from API Gateway insde the pca-sererless repository.
+
+## Project Status
+Project currently in the process of migrating from [AWS Amplify Functions](https://docs.amplify.aws/react/build-a-backend/functions/set-up-function/) to AWS Lambda behind API Gateway.
+
+### Affected Features
+| Feature Name | Description |
+|---------------|-------------|
+| `PII Removal` | Application migrated to serverless functions from [pca-serverless](https://github.com/JustinDosaj/pca-serverless) but do not integrate AWS Comphrehend yet |
