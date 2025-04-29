@@ -62,3 +62,11 @@ NEXT_PUBLIC_API_ENDPOINT=https://<your-api-gateway-url>.amazonaws.com/<env>/
 ```bash
 npm run dev
 ```
+
+## Project Status
+Project currently in the process of migrating from [AWS Amplify Functions](https://docs.amplify.aws/react/build-a-backend/functions/set-up-function/) to AWS Lambda behind API Gateway.
+
+### Affected Features
+| Feature Name | Description |
+|---------------|-------------|
+| `PII Removal` | Application migrated to serverless functions from [pca-serverless](https://github.com/JustinDosaj/pca-serverless) but do not integrate AWS Comphrehend yet |
