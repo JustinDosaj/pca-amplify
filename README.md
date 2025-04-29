@@ -69,7 +69,7 @@ npm run dev
 ```
 
 ## Using the Chat App
-The application was setup to require a valid JWT to allow access to APIs. You
+The chat application requires a valid JWT to authorize API calls, please following the [AWS Amplify Setup Instructions](https://docs.amplify.aws/react/start/quickstart/) to setup hosting and authentication to get conversations to work. Alternatively, you can entirely remove the authorization requirement from API Gateway insde the pca-sererless repository.
 
 ## Project Status
 Project currently in the process of migrating from [AWS Amplify Functions](https://docs.amplify.aws/react/build-a-backend/functions/set-up-function/) to AWS Lambda behind API Gateway.
