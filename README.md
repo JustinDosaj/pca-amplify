@@ -13,10 +13,12 @@ separately through the [pca-serverless](https://github.com/JustinDosaj/pca-serve
 - Modern UI with responsive design
 
 ## Tech Stack
-- [Next.js](https://nextjs.org/)
-- [React](https://reactjs.org/)
-- [TailwindCSS](https://tailwindcss.com/)
-- [AWS Amplify Hosting](https://docs.aws.amazon.com/amplify/latest/userguide/welcome.html)
+- **Web Framework**: [Next.js](https://nextjs.org/)
+- **JavaScript Library**: [React](https://reactjs.org/)
+- **Responsive UI/UX**: [TailwindCSS](https://tailwindcss.com/)
+- **Hosting**: [AWS Amplify Hosting](https://docs.aws.amazon.com/amplify/latest/userguide/welcome.html)
+- **CI/CD**: [Github Actions](https://github.com/features/actions)
+- **Unit Testing**: [Jest](https://jestjs.io/)
 
 ## Environment Variables
 The following environment variables are required for the app to function properly:
