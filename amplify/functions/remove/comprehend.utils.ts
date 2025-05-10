@@ -2,7 +2,6 @@ import { ComprehendClient, DetectPiiEntitiesCommand, LanguageCode, PiiEntity } f
 
 const client = new ComprehendClient({region: 'us-east-2'})
 
-
 export const DEFAULT_PII_TYPES = [
     "ADDRESS",
     "AGE",
