@@ -12,7 +12,15 @@ import {
     CheckCircleIcon,
     XCircleIcon,
     PlayIcon,
-    FunnelIcon
+    FunnelIcon,
+    TrashIcon,
+    ArrowUpIcon,
+    XMarkIcon,
+    EnvelopeIcon,
+    UserGroupIcon,
+    CreditCardIcon,
+    ChartBarIcon,
+    InformationCircleIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
@@ -221,7 +229,44 @@ const mockWorkflowHistory: WorkflowHistory[] = [
     }
 ];
 
-type ViewMode = 'templates' | 'workflow' | 'history' | 'all-history';
+// Mock data for pricing plans
+const pricingPlans = [
+    {
+        name: 'Free',
+        price: 0,
+        tokens: 100,
+        features: ['Basic workflow templates', 'Limited storage', 'Community support']
+    },
+    {
+        name: 'Pro',
+        price: 19,
+        tokens: 1000,
+        features: ['All workflow templates', '5GB storage', 'Priority support', 'Advanced analytics']
+    },
+    {
+        name: 'Enterprise',
+        price: 49,
+        tokens: 5000,
+        features: ['Custom workflows', 'Unlimited storage', '24/7 support', 'Team collaboration', 'API access']
+    }
+];
+
+// Mock data for usage history
+const usageHistory = [
+    { date: '2024-03-01', tokens: 20 },
+    { date: '2024-03-08', tokens: 35 },
+    { date: '2024-03-15', tokens: 25 },
+    { date: '2024-03-22', tokens: 40 }
+];
+
+type ViewMode = 
+    | 'templates'
+    | 'workflow'
+    | 'history'
+    | 'all-history'
+    | 'account';
+
+type AccountTab = 'general' | 'billing' | 'usage' | 'earn';
 
 const TestPage = () => {
     const [showMenu, setShowMenu] = useState(false);
@@ -230,6 +275,7 @@ const TestPage = () => {
     const [viewMode, setViewMode] = useState<ViewMode>('templates');
     const [historySearch, setHistorySearch] = useState('');
     const [historyFilter, setHistoryFilter] = useState<'all' | 'completed' | 'failed'>('all');
+    const [accountTab, setAccountTab] = useState<AccountTab>('general');
 
     const getStatusIcon = (status: 'running' | 'completed' | 'failed') => {
         switch (status) {
@@ -255,7 +301,10 @@ const TestPage = () => {
             case 'templates':
                 return (
                     <div className="sticky top-0 z-10 bg-white border-b border-slate-200 p-4">
-                        <h1 className="text-2xl font-semibold text-slate-900">Workflow Templates</h1>
+                        <div className="flex items-center justify-between">
+                            <h1 className="text-xl font-semibold text-slate-900">Workflow Templates</h1>
+                            <div className="w-[400px]"></div> {/* Spacer to maintain consistent header height */}
+                        </div>
                     </div>
                 );
 
@@ -264,7 +313,7 @@ const TestPage = () => {
                     <div className="sticky top-0 z-10 bg-white border-b border-slate-200 p-4">
                         <div className="flex items-center justify-between">
                             <div>
-                                <h1 className="text-2xl font-semibold text-slate-900">{selectedWorkflow?.title}</h1>
+                                <h1 className="text-xl font-semibold text-slate-900">{selectedWorkflow?.title}</h1>
                                 <p className="text-sm text-slate-500 mt-1">Template ID: {selectedWorkflow?.id}</p>
                             </div>
                             <div className="flex gap-4">
@@ -296,7 +345,7 @@ const TestPage = () => {
                     <div className="sticky top-0 z-10 bg-white border-b border-slate-200 p-4">
                         <div className="flex items-center justify-between">
                             <div>
-                                <h1 className="text-2xl font-semibold text-slate-900">Workflow Run: {selectedHistory?.id}</h1>
+                                <h1 className="text-xl font-semibold text-slate-900">Workflow Run: {selectedHistory?.id}</h1>
                                 <p className="text-sm text-slate-500 mt-1">
                                     Template: {selectedHistory?.title} (ID: {selectedHistory?.templateId})
                                 </p>
@@ -315,29 +364,80 @@ const TestPage = () => {
             case 'all-history':
                 return (
                     <div className="sticky top-0 z-10 bg-white border-b border-slate-200 p-4">
-                        <div className="flex items-center justify-between mb-4">
-                            <h1 className="text-2xl font-semibold text-slate-900">Workflow History</h1>
-                        </div>
-                        <div className="flex gap-4">
-                            <div className="relative flex-1">
-                                <input
-                                    type="text"
-                                    placeholder="Search history..."
-                                    value={historySearch}
-                                    onChange={(e) => setHistorySearch(e.target.value)}
-                                    className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                />
-                                <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-5 w-5 text-slate-400" />
+                        <div className="flex items-center justify-between">
+                            <h1 className="text-xl font-semibold text-slate-900">Workflow History</h1>
+                            <div className="flex gap-4">
+                                <div className="relative flex-1">
+                                    <input
+                                        type="text"
+                                        placeholder="Search history..."
+                                        value={historySearch}
+                                        onChange={(e) => setHistorySearch(e.target.value)}
+                                        className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                    <MagnifyingGlassIcon className="absolute left-3 top-2.5 h-5 w-5 text-slate-400" />
+                                </div>
+                                <select
+                                    value={historyFilter}
+                                    onChange={(e) => setHistoryFilter(e.target.value as 'all' | 'completed' | 'failed')}
+                                    className="px-4 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                >
+                                    <option value="all">All Status</option>
+                                    <option value="completed">Completed</option>
+                                    <option value="failed">Failed</option>
+                                </select>
                             </div>
-                            <select
-                                value={historyFilter}
-                                onChange={(e) => setHistoryFilter(e.target.value as 'all' | 'completed' | 'failed')}
-                                className="px-4 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                            >
-                                <option value="all">All Status</option>
-                                <option value="completed">Completed</option>
-                                <option value="failed">Failed</option>
-                            </select>
+                        </div>
+                    </div>
+                );
+
+            case 'account':
+                return (
+                    <div className="sticky top-0 z-10 bg-white border-b border-slate-200 p-4">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-3">
+                                    <UserCircleIcon className="h-10 w-10 text-slate-700" />
+                                    <div>
+                                        <h1 className="text-xl font-semibold text-slate-900">John Doe</h1>
+                                        <p className="text-sm text-slate-500">Free Plan</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex gap-2">
+                                <Button
+                                    onClick={() => setAccountTab('general')}
+                                    variant="outline"
+                                    color="slate"
+                                    className={`flex items-center gap-2 ${accountTab === 'general' ? 'bg-slate-100' : ''}`}
+                                >
+                                    General
+                                </Button>
+                                <Button
+                                    onClick={() => setAccountTab('billing')}
+                                    variant="outline"
+                                    color="slate"
+                                    className={`flex items-center gap-2 ${accountTab === 'billing' ? 'bg-slate-100' : ''}`}
+                                >
+                                    Billing
+                                </Button>
+                                <Button
+                                    onClick={() => setAccountTab('usage')}
+                                    variant="outline"
+                                    color="slate"
+                                    className={`flex items-center gap-2 ${accountTab === 'usage' ? 'bg-slate-100' : ''}`}
+                                >
+                                    Usage
+                                </Button>
+                                <Button
+                                    onClick={() => setAccountTab('earn')}
+                                    variant="outline"
+                                    color="slate"
+                                    className={`flex items-center gap-2 ${accountTab === 'earn' ? 'bg-slate-100' : ''}`}
+                                >
+                                    Earn Credits
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 );
@@ -519,6 +619,230 @@ const TestPage = () => {
                         ))}
                     </div>
                 );
+
+            case 'account':
+                return (
+                    <div className="p-6">
+                        {accountTab === 'general' && (
+                            <div className="space-y-6">
+                                <div className="bg-white rounded-lg border border-slate-200 p-6">
+                                    <h2 className="text-lg font-medium text-slate-900 mb-4">Account Information</h2>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <label className="block text-sm font-medium text-slate-700 mb-1">Username</label>
+                                            <div className="flex gap-2">
+                                                <input 
+                                                    type="text" 
+                                                    defaultValue="John Doe" 
+                                                    className="flex-1 px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                                />
+                                                <Button color="blue">Save</Button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                                            <input type="email" value="john.doe@example.com" className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50" readOnly />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-slate-700 mb-1">Account Type</label>
+                                            <input type="text" value="Free Plan" className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50" readOnly />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white rounded-lg border border-slate-200 p-6">
+                                    <h2 className="text-lg font-medium text-slate-900 mb-4 text-red-600">Danger Zone</h2>
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <h3 className="font-medium text-slate-900">Delete Account</h3>
+                                            <p className="text-sm text-slate-500">Permanently delete your account and all associated data</p>
+                                        </div>
+                                        <Button color="slate" variant="outline" className="flex items-center gap-2">
+                                            <TrashIcon className="h-5 w-5" />
+                                            Delete Account
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {accountTab === 'billing' && (
+                            <div className="space-y-6">
+                                <div className="bg-white rounded-lg border border-slate-200 p-6">
+                                    <div className="flex items-center justify-between mb-6">
+                                        <div>
+                                            <h2 className="text-lg font-medium text-slate-900">Current Plan</h2>
+                                            <p className="text-sm text-slate-500 mt-1">Free Plan - 100 tokens/month</p>
+                                        </div>
+                                        <Button color="blue" className="flex items-center gap-2">
+                                            <ArrowUpIcon className="h-5 w-5" />
+                                            Upgrade Plan
+                                        </Button>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+                                        {pricingPlans.map((plan) => (
+                                            <div key={plan.name} className="border border-slate-200 rounded-lg p-6 hover:border-blue-500 transition-colors">
+                                                <h3 className="text-lg font-medium text-slate-900">{plan.name}</h3>
+                                                <div className="mt-2">
+                                                    <span className="text-3xl font-bold">${plan.price}</span>
+                                                    <span className="text-slate-500">/month</span>
+                                                </div>
+                                                <p className="text-sm text-slate-500 mt-2">{plan.tokens} tokens/month</p>
+                                                <ul className="mt-4 space-y-2">
+                                                    {plan.features.map((feature) => (
+                                                        <li key={feature} className="flex items-center text-sm text-slate-600">
+                                                            <CheckCircleIcon className="h-5 w-5 text-green-500 mr-2" />
+                                                            {feature}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                                <Button 
+                                                    color={'slate'} 
+                                                    variant="outline"
+                                                    className="w-full mt-6"
+                                                >
+                                                    {plan.name === 'Free' ? 'Current Plan' : 'Select Plan'}
+                                                </Button>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="mt-8 pt-6 border-t border-slate-200">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <h3 className="font-medium text-slate-900">Cancel Subscription</h3>
+                                                <p className="text-sm text-slate-500 mt-1">Cancel your current subscription plan</p>
+                                            </div>
+                                            <Button color="slate" variant="outline" className="flex items-center gap-2">
+                                                <XMarkIcon className="h-5 w-5" />
+                                                Cancel Subscription
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {accountTab === 'usage' && (
+                            <div className="space-y-6">
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div className="bg-white rounded-lg border border-slate-200 p-6">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2 bg-blue-100 rounded-lg">
+                                                <ChartBarIcon className="h-6 w-6 text-blue-600" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-sm font-medium text-slate-500">Total Credits</h3>
+                                                <p className="text-2xl font-semibold text-slate-900">88</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-white rounded-lg border border-slate-200 p-6">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2 bg-green-100 rounded-lg">
+                                                <ClockIcon className="h-6 w-6 text-green-600" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-sm font-medium text-slate-500">Workflows Run</h3>
+                                                <p className="text-2xl font-semibold text-slate-900">12</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-white rounded-lg border border-slate-200 p-6">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2 bg-purple-100 rounded-lg">
+                                                <CreditCardIcon className="h-6 w-6 text-purple-600" />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-sm font-medium text-slate-500">Storage Used</h3>
+                                                <p className="text-2xl font-semibold text-slate-900">0 / 0.5 GB</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white rounded-lg border border-slate-200 p-6">
+                                    <h2 className="text-lg font-medium text-slate-900 mb-4">Usage History</h2>
+                                    <div className="h-64">
+                                        {/* Placeholder for chart - you can integrate a charting library here */}
+                                        <div className="h-full flex items-center justify-center text-slate-500">
+                                            Usage trend chart will be displayed here
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {accountTab === 'earn' && (
+                            <div className="space-y-6">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="bg-white rounded-lg border border-slate-200 p-6">
+                                        <h2 className="text-lg font-medium text-slate-900 mb-4">Your Referral Link</h2>
+                                        <div className="flex gap-2">
+                                            <input 
+                                                type="text" 
+                                                value="https://yourapp.com/ref/JOHN123" 
+                                                className="flex-1 px-3 py-2 border border-slate-200 rounded-md bg-slate-50" 
+                                                readOnly 
+                                            />
+                                            <Button color="slate" variant="outline">Copy</Button>
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-white rounded-lg border border-slate-200 p-6">
+                                        <h2 className="text-lg font-medium text-slate-900 mb-4">Referral Stats</h2>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <p className="text-sm text-slate-500">Total Credits Earned</p>
+                                                <p className="text-2xl font-semibold text-slate-900">50</p>
+                                            </div>
+                                            <div>
+                                                <p className="text-sm text-slate-500">Friends Recruited</p>
+                                                <p className="text-2xl font-semibold text-slate-900">3</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white rounded-lg border border-slate-200 p-6">
+                                    <h2 className="text-lg font-medium text-slate-900 mb-4">Invite Friends</h2>
+                                    <div className="flex gap-2">
+                                        <input 
+                                            type="email" 
+                                            placeholder="Enter friend's email" 
+                                            className="flex-1 px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                                        />
+                                        <Button color="blue" className="flex items-center gap-2">
+                                            <EnvelopeIcon className="h-5 w-5" />
+                                            Send Invite
+                                        </Button>
+                                    </div>
+                                </div>
+
+                                <div className="bg-white rounded-lg border border-slate-200 p-6">
+                                    <h2 className="text-lg font-medium text-slate-900 mb-4">Program Details</h2>
+                                    <div className="prose prose-sm text-slate-600">
+                                        <p>Earn credits by inviting friends to join our platform. For each friend who signs up using your referral link:</p>
+                                        <ul className="list-disc pl-5 mt-2 space-y-1">
+                                            <li>You'll receive 10 credits when they sign up</li>
+                                            <li>You'll receive 5 credits for each workflow they run</li>
+                                            <li>Your friend will receive 5 bonus credits on signup</li>
+                                        </ul>
+                                        <div className="mt-4 p-4 bg-slate-50 rounded-md">
+                                            <p className="text-sm text-slate-500">
+                                                <InformationCircleIcon className="h-5 w-5 inline-block mr-1" />
+                                                Credits earned through referrals never expire and can be used for any workflow.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                );
         }
     };
 
@@ -596,7 +920,7 @@ const TestPage = () => {
 
                     <div className="mt-auto pt-4">
                         <Button 
-                            onClick={() => {}} 
+                            onClick={() => setViewMode('account')} 
                             color="slate" 
                             variant="outline"
                             className="w-full justify-start rounded-md"
