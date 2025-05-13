@@ -21,7 +21,9 @@ import {
     CreditCardIcon,
     ChartBarIcon,
     InformationCircleIcon,
-    BookmarkIcon
+    BookmarkIcon,
+    PencilIcon,
+    CheckIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
@@ -296,7 +298,8 @@ type ViewMode =
     | 'history'
     | 'all-history'
     | 'account'
-    | 'my-templates';
+    | 'my-templates'
+    | 'saved-template';
 
 type AccountTab = 'general' | 'billing' | 'usage' | 'earn';
 
@@ -304,10 +307,16 @@ const TestPage = () => {
     const [showMenu, setShowMenu] = useState(false);
     const [selectedWorkflow, setSelectedWorkflow] = useState<WorkflowTemplate | null>(null);
     const [selectedHistory, setSelectedHistory] = useState<WorkflowHistory | null>(null);
+    const [selectedSavedTemplate, setSelectedSavedTemplate] = useState<typeof mockSavedTemplates[0] | null>(null);
     const [viewMode, setViewMode] = useState<ViewMode>('templates');
     const [historySearch, setHistorySearch] = useState('');
     const [historyFilter, setHistoryFilter] = useState<'all' | 'completed' | 'failed'>('all');
     const [accountTab, setAccountTab] = useState<AccountTab>('general');
+    const [isEditingTitle, setIsEditingTitle] = useState(false);
+    const [editedTitle, setEditedTitle] = useState('');
+    const [showSaveModal, setShowSaveModal] = useState(false);
+    const [newTemplateName, setNewTemplateName] = useState('');
+    const [newTemplateDescription, setNewTemplateDescription] = useState('');
 
     const getStatusIcon = (status: 'running' | 'completed' | 'failed') => {
         switch (status) {
@@ -361,10 +370,7 @@ const TestPage = () => {
                                     Run Workflow
                                 </Button>
                                 <Button
-                                    onClick={() => {
-                                        // Mock saving the workflow
-                                        console.log('Saving workflow:', selectedWorkflow?.id);
-                                    }}
+                                    onClick={() => setShowSaveModal(true)}
                                     variant="outline"
                                     color="slate"
                                     className="flex items-center gap-2"
@@ -492,6 +498,86 @@ const TestPage = () => {
                         <div className="flex items-center justify-between">
                             <h1 className="text-xl font-semibold text-slate-900">My Saved Templates</h1>
                             <div className="w-[400px]"></div> {/* Spacer to maintain consistent header height */}
+                        </div>
+                    </div>
+                );
+
+            case 'saved-template':
+                return (
+                    <div className="sticky top-0 z-10 bg-white border-b border-slate-200 p-4">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                {isEditingTitle ? (
+                                    <>
+                                        <input
+                                            type="text"
+                                            value={editedTitle}
+                                            onChange={(e) => setEditedTitle(e.target.value)}
+                                            className="text-xl font-semibold text-slate-900 border border-slate-200 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            autoFocus
+                                        />
+                                        <Button
+                                            onClick={() => {
+                                                if (selectedSavedTemplate) {
+                                                    selectedSavedTemplate.title = editedTitle;
+                                                    setIsEditingTitle(false);
+                                                }
+                                            }}
+                                            color="slate"
+                                            variant="outline"
+                                            className="p-1"
+                                        >
+                                            <CheckIcon className="h-5 w-5" />
+                                        </Button>
+                                        <Button
+                                            onClick={() => {
+                                                setIsEditingTitle(false);
+                                                setEditedTitle(selectedSavedTemplate?.title || '');
+                                            }}
+                                            color="slate"
+                                            variant="outline"
+                                            className="p-1"
+                                        >
+                                            <XMarkIcon className="h-5 w-5" />
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <h1 className="text-xl font-semibold text-slate-900">{selectedSavedTemplate?.title}</h1>
+                                        <Button
+                                            onClick={() => {
+                                                setIsEditingTitle(true);
+                                                setEditedTitle(selectedSavedTemplate?.title || '');
+                                            }}
+                                            color="slate"
+                                            variant="outline"
+                                            className="p-1"
+                                        >
+                                            <PencilIcon className="h-5 w-5" />
+                                        </Button>
+                                    </>
+                                )}
+                            </div>
+                            <div className="flex gap-4">
+                                <Button
+                                    onClick={() => {
+                                        // Mock running the workflow
+                                        console.log('Running saved template:', selectedSavedTemplate?.id);
+                                    }}
+                                    color="blue"
+                                    className="flex items-center gap-2"
+                                >
+                                    <PlayIcon className="h-5 w-5" />
+                                    Run Workflow
+                                </Button>
+                                <Button
+                                    onClick={() => setViewMode('my-templates')}
+                                    variant="outline"
+                                    color="slate"
+                                >
+                                    Back to My Templates
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 );
@@ -905,12 +991,8 @@ const TestPage = () => {
                             <div 
                                 key={template.id}
                                 onClick={() => {
-                                    // Find the original template and set it as selected
-                                    const originalTemplate = mockWorkflowTemplates.find(t => t.id === template.originalTemplateId);
-                                    if (originalTemplate) {
-                                        setSelectedWorkflow(originalTemplate);
-                                        setViewMode('workflow');
-                                    }
+                                    setSelectedSavedTemplate(template);
+                                    setViewMode('saved-template');
                                 }}
                                 className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
                             >
@@ -941,7 +1023,183 @@ const TestPage = () => {
                         ))}
                     </div>
                 );
+
+            case 'saved-template':
+                if (!selectedSavedTemplate) return null;
+                const originalTemplate = mockWorkflowTemplates.find(t => t.id === selectedSavedTemplate.originalTemplateId);
+                if (!originalTemplate) return null;
+
+                return (
+                    <div className="space-y-6 p-6">
+                        <div className="bg-white rounded-lg border border-slate-200 p-6">
+                            <h3 className="text-lg font-medium text-slate-900 mb-4">Custom Inputs</h3>
+                            <div className="space-y-4">
+                                {Object.entries(selectedSavedTemplate.inputs).map(([key, value]) => (
+                                    <div key={key}>
+                                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                                            {key.charAt(0).toUpperCase() + key.slice(1)}
+                                        </label>
+                                        <div className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50">
+                                            {value}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {originalTemplate.tasks.map((task) => (
+                            <div key={task.id} className="bg-white rounded-lg border border-slate-200 p-6">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h3 className="text-lg font-medium text-slate-900">{task.name}</h3>
+                                        <p className="text-sm text-slate-500">Using {task.model}</p>
+                                    </div>
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium
+                                        ${task.status === 'running' ? 'bg-blue-100 text-blue-800' :
+                                        task.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                        task.status === 'failed' ? 'bg-red-100 text-red-800' :
+                                        'bg-slate-100 text-slate-800'}`}
+                                    >
+                                        {task.status}
+                                    </span>
+                                </div>
+                                
+                                <div className="space-y-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                                            Input Type
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={task.settings.inputType}
+                                            className="w-full px-3 py-2 border border-slate-200 rounded-md"
+                                            readOnly
+                                        />
+                                    </div>
+                                    
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                                            Instructions
+                                        </label>
+                                        <textarea
+                                            value={task.settings.instructions}
+                                            className="w-full px-3 py-2 border border-slate-200 rounded-md"
+                                            rows={3}
+                                            readOnly
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                                            Output
+                                        </label>
+                                        <div className="w-full px-3 py-2 border border-slate-200 rounded-md bg-slate-50 min-h-[100px]">
+                                            {task.output || 'No output yet'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                );
         }
+    };
+
+    const renderSaveTemplateModal = () => {
+        if (!showSaveModal) return null;
+
+        return (
+            <div className="fixed inset-0 z-50 overflow-y-auto">
+                {/* Backdrop with blur */}
+                <div 
+                    className="fixed inset-0 backdrop-blur-sm bg-white/30 transition-opacity" 
+                    onClick={() => setShowSaveModal(false)} 
+                />
+
+                {/* Modal */}
+                <div className="flex min-h-full items-center justify-center p-4">
+                    <div className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-2xl border border-slate-200 transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+                        <div className="absolute right-0 top-0 pr-4 pt-4">
+                            <button
+                                type="button"
+                                className="rounded-md bg-white text-slate-400 hover:text-slate-500 focus:outline-none"
+                                onClick={() => setShowSaveModal(false)}
+                            >
+                                <XMarkIcon className="h-6 w-6" />
+                            </button>
+                        </div>
+
+                        <div className="sm:flex sm:items-start">
+                            <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                                <h3 className="text-lg font-semibold leading-6 text-slate-900 mb-2">
+                                    Save Template Settings
+                                </h3>
+                                <p className="text-sm text-slate-500 mb-6">
+                                    Save this workflow as a custom template with your preferred settings. 
+                                    You can reuse this template later with the same configuration.
+                                </p>
+
+                                <div className="space-y-4">
+                                    <div>
+                                        <label htmlFor="template-name" className="block text-sm font-medium text-slate-700 mb-1">
+                                            Template Name
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="template-name"
+                                            value={newTemplateName}
+                                            onChange={(e) => setNewTemplateName(e.target.value)}
+                                            placeholder="Enter a name for your template"
+                                            className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label htmlFor="template-description" className="block text-sm font-medium text-slate-700 mb-1">
+                                            Description (Optional)
+                                        </label>
+                                        <textarea
+                                            id="template-description"
+                                            value={newTemplateDescription}
+                                            onChange={(e) => setNewTemplateDescription(e.target.value)}
+                                            placeholder="Add a description to help identify this template"
+                                            rows={3}
+                                            className="w-full px-3 py-2 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="mt-6 sm:mt-8 flex justify-end gap-3">
+                            <Button
+                                onClick={() => setShowSaveModal(false)}
+                                variant="outline"
+                                color="slate"
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                onClick={() => {
+                                    // Here you would typically save the template
+                                    console.log('Saving template:', {
+                                        name: newTemplateName,
+                                        description: newTemplateDescription,
+                                        workflow: selectedWorkflow
+                                    });
+                                    setShowSaveModal(false);
+                                    setNewTemplateName('');
+                                    setNewTemplateDescription('');
+                                }}
+                                color="blue"
+                            >
+                                Save Template
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
     };
 
     return (
@@ -1057,6 +1315,7 @@ const TestPage = () => {
                     {renderMainContent()}
                 </div>
             </div>
+            {renderSaveTemplateModal()}
         </div>
     );
 };
