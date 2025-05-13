@@ -20,7 +20,8 @@ import {
     UserGroupIcon,
     CreditCardIcon,
     ChartBarIcon,
-    InformationCircleIcon
+    InformationCircleIcon,
+    BookmarkIcon
 } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
@@ -259,12 +260,43 @@ const usageHistory = [
     { date: '2024-03-22', tokens: 40 }
 ];
 
+// Mock data for saved templates
+const mockSavedTemplates = [
+    {
+        id: 'SAVED-001',
+        title: 'My Social Media Post Generator',
+        description: 'Customized workflow for creating engaging LinkedIn posts from blog content',
+        totalTasks: 3,
+        status: 'inactive',
+        originalTemplateId: '1',
+        savedAt: '2024-03-20T15:30:00Z',
+        inputs: {
+            url: 'https://myblog.com/articles',
+            instructions: 'Create professional LinkedIn posts with industry insights'
+        }
+    },
+    {
+        id: 'SAVED-002',
+        title: 'Customer Data Cleaner',
+        description: 'Optimized PII removal workflow for customer feedback analysis',
+        totalTasks: 2,
+        status: 'inactive',
+        originalTemplateId: '2',
+        savedAt: '2024-03-21T09:15:00Z',
+        inputs: {
+            text: 'Customer feedback data',
+            instructions: 'Remove PII and analyze sentiment'
+        }
+    }
+];
+
 type ViewMode = 
     | 'templates'
     | 'workflow'
     | 'history'
     | 'all-history'
-    | 'account';
+    | 'account'
+    | 'my-templates';
 
 type AccountTab = 'general' | 'billing' | 'usage' | 'earn';
 
@@ -327,6 +359,18 @@ const TestPage = () => {
                                 >
                                     <PlayIcon className="h-5 w-5" />
                                     Run Workflow
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        // Mock saving the workflow
+                                        console.log('Saving workflow:', selectedWorkflow?.id);
+                                    }}
+                                    variant="outline"
+                                    color="slate"
+                                    className="flex items-center gap-2"
+                                >
+                                    <ArrowUpIcon className="h-5 w-5" />
+                                    Save Template
                                 </Button>
                                 <Button
                                     onClick={() => setViewMode('templates')}
@@ -438,6 +482,16 @@ const TestPage = () => {
                                     Earn Credits
                                 </Button>
                             </div>
+                        </div>
+                    </div>
+                );
+
+            case 'my-templates':
+                return (
+                    <div className="sticky top-0 z-10 bg-white border-b border-slate-200 p-4">
+                        <div className="flex items-center justify-between">
+                            <h1 className="text-xl font-semibold text-slate-900">My Saved Templates</h1>
+                            <div className="w-[400px]"></div> {/* Spacer to maintain consistent header height */}
                         </div>
                     </div>
                 );
@@ -843,6 +897,50 @@ const TestPage = () => {
                         )}
                     </div>
                 );
+
+            case 'my-templates':
+                return (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                        {mockSavedTemplates.map((template) => (
+                            <div 
+                                key={template.id}
+                                onClick={() => {
+                                    // Find the original template and set it as selected
+                                    const originalTemplate = mockWorkflowTemplates.find(t => t.id === template.originalTemplateId);
+                                    if (originalTemplate) {
+                                        setSelectedWorkflow(originalTemplate);
+                                        setViewMode('workflow');
+                                    }
+                                }}
+                                className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+                            >
+                                <h3 className="text-lg font-semibold text-slate-900 mb-2">{template.title}</h3>
+                                <p className="text-slate-600 mb-4">{template.description}</p>
+                                <div className="space-y-2 mb-4">
+                                    <div className="text-sm text-slate-500">
+                                        Saved on: {new Date(template.savedAt).toLocaleDateString()}
+                                    </div>
+                                    <div className="text-sm text-slate-500">
+                                        Based on: {mockWorkflowTemplates.find(t => t.id === template.originalTemplateId)?.title}
+                                    </div>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-sm text-slate-500">
+                                        {template.totalTasks} tasks
+                                    </span>
+                                    <span className={`px-2 py-1 rounded-full text-xs font-medium
+                                        ${template.status === 'running' ? 'bg-blue-100 text-blue-800' :
+                                        template.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                        template.status === 'failed' ? 'bg-red-100 text-red-800' :
+                                        'bg-slate-100 text-slate-800'}`}
+                                    >
+                                        {template.status}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                );
         }
     };
 
@@ -858,9 +956,10 @@ const TestPage = () => {
             {/* Sidebar Menu */}
             <div className={`fixed md:static z-40 bg-slate-50 h-full transition-transform duration-300 md:translate-x-0 ${showMenu ? 'translate-x-0' : '-translate-x-full'} md:w-[15vw] w-64`}>
                 <div className="h-full border-r border-slate-300/40 p-6 bg-slate-50 flex flex-col">
-                    <div className="mb-4">
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-lg font-semibold text-slate-900">Workflows</h2>
+                    {/* Title and Home Button */}
+                    <div className="mb-8">
+                        <div className="flex items-center justify-between">
+                            <h2 className="text-lg font-semibold text-slate-900">Workflow</h2>
                             <Link href="/">
                                 <Button 
                                     color="slate" 
@@ -873,13 +972,38 @@ const TestPage = () => {
                         </div>
                     </div>
 
+                    {/* Workflow Templates Button */}
+                    <div className="mb-8">
+                        <Button 
+                            onClick={() => setViewMode('templates')}
+                            variant="outline"
+                            color="slate"
+                            className="w-full justify-start rounded-md mb-2"
+                        >
+                            <PlusIcon className="h-5 w-5 mr-2 text-slate-900"/>
+                            View Workflow Templates
+                        </Button>
+                        <Button 
+                            onClick={() => setViewMode('my-templates')}
+                            variant="outline"
+                            color="slate"
+                            className="w-full justify-start rounded-md"
+                        >
+                            <BookmarkIcon className="h-5 w-5 mr-2 text-slate-900"/>
+                            My Templates
+                        </Button>
+                    </div>
+
+                    {/* Spacer */}
+                    <div className="flex-1" />
+
                     {/* History Section */}
-                    <div className="mb-6">
-                        <h3 className="text-sm font-medium text-slate-700 mb-2 flex items-center">
+                    <div className="pt-8 border-t border-slate-200 mb-8">
+                        <h3 className="text-sm font-medium text-slate-700 mb-4 flex items-center">
                             <ClockIcon className="h-4 w-4 mr-2" />
                             History
                         </h3>
-                        <div className="space-y-2">
+                        <div className="space-y-2 mb-4">
                             {mockWorkflowHistory.slice(0, 5).map((workflow) => (
                                 <button
                                     key={workflow.id}
@@ -900,25 +1024,14 @@ const TestPage = () => {
                             onClick={() => setViewMode('all-history')}
                             variant="outline"
                             color="slate"
-                            className="w-full mt-2 text-sm"
+                            className="w-full text-sm rounded-md"
                         >
-                            View All History
+                            View All
                         </Button>
                     </div>
 
-                    <div className="flex-1">
-                        <Button 
-                            onClick={() => setViewMode('templates')}
-                            variant="outline"
-                            color="slate"
-                            className="w-full justify-start mb-2 rounded-md"
-                        >
-                            <PlusIcon className="h-5 w-5 mr-2 text-slate-900"/>
-                            View Workflow Templates
-                        </Button>
-                    </div>
-
-                    <div className="mt-auto pt-4">
+                    {/* My Account Button */}
+                    <div className="pt-8 border-t border-slate-200">
                         <Button 
                             onClick={() => setViewMode('account')} 
                             color="slate" 
