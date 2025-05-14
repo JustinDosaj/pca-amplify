@@ -1,3 +1,5 @@
+/*TODO: Backup then remoove chat feature. Platform no longer uses chat, but AI workflows*/
+
 'use client';
 
 import React, { useEffect, useState } from 'react';

@@ -1,8 +1,7 @@
+/*TODO: Delete this page once logout is implemented into dashboard layout and navbar */
 
 "use client"
 
-import { Header } from "@/components/elements/Header";
-import { Footer } from "@/components/elements/Footer";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function Account() {
@@ -11,11 +10,9 @@ export default function Account() {
 
   return (
     <>
-      <Header/>
       <main className="h-screen mx-auto my-auto grid">
         <button onClick={logout}>Logout</button>
       </main>
-      <Footer/>
     </>
   );
 }
