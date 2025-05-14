@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Lexend } from 'next/font/google'
 import { AuthProvider } from "@/providers/auth.providers";
-import { ConversationsProvider } from "@/providers/conversations.providers";
 import { ToastContainer } from "react-toastify";
 import "./globals.css";
 import 'react-toastify/dist/ReactToastify.css';
@@ -40,27 +39,24 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{children: React.ReactNode}>) {
-  return (
-    <html lang="en" className={clsx(
-      'h-full scroll-smooth bg-white antialiased', inter.variable, lexend.variable )}>
-          <body className={'flex h-full flex-col'}>
-            <AuthProvider>
-              <ConversationsProvider>
-              <ToastContainer
-                toastStyle={customToastStyle}
-                position="top-right" // Customize position if needed
-                autoClose={5000} // Automatically close after 5 seconds
-                hideProgressBar={false} // Show or hide progress bar
-                newestOnTop={true} // Newest toasts appear on top
-                closeOnClick={true} // Close toast on click
-                pauseOnHover={true} // Pause timer on hover
-                draggable={true} // Enable drag to close
-                theme="light" // Apply dark theme
-              />
-                {children}
-              </ConversationsProvider>
-            </AuthProvider>
-          </body>
-    </html>
-  );
+    return (
+        <html lang="en" className={clsx('h-full scroll-smooth bg-white antialiased', inter.variable, lexend.variable )}>
+            <body className={'flex h-full flex-col'}>
+                <AuthProvider>
+                    <ToastContainer
+                        toastStyle={customToastStyle}
+                        position="top-right" // Customize position if needed
+                        autoClose={5000} // Automatically close after 5 seconds
+                        hideProgressBar={false} // Show or hide progress bar
+                        newestOnTop={true} // Newest toasts appear on top
+                        closeOnClick={true} // Close toast on click
+                        pauseOnHover={true} // Pause timer on hover
+                        draggable={true} // Enable drag to close
+                        theme="light" // Apply dark theme
+                    />
+                    {children}
+                </AuthProvider>
+            </body>
+        </html>
+    );
 }
