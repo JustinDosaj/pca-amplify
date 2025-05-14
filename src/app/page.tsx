@@ -1,7 +1,7 @@
 "use client"
 
 import { Hero } from "@/components/ui/home/Hero";
-import { Header } from "@/components/elements/Header";
+import { Navbar } from "@/components/elements/Navbar";
 import { Footer } from "@/components/elements/Footer";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -13,7 +13,7 @@ export default function Home() {
 
   return (
     <>
-      <Header/>
+      <Navbar/>
       <main className="h-screen">
         <Hero/>
       </main>
