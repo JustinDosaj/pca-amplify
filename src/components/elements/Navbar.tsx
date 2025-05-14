@@ -109,7 +109,7 @@ function DesktopNavigation() {
       )
 }
 
-export function Header() {
+export function Navbar() {
 
     const { user } = useAuth();
 
