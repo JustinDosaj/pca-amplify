@@ -4,8 +4,7 @@ import React, { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import DashboardHeader from '../../components/DashboardHeader';
 import TaskDetail from '../../components/TaskDetail';
-import DashboardLayout from '../../components/DashboardLayout';
-import { mockSavedTemplates, mockWorkflowTemplates, mockWorkflowHistory } from '../../data';
+import { mockSavedTemplates, mockWorkflowTemplates } from '../../data';
 
 const SavedTemplateDetailPage = () => {
     const params = useParams();
@@ -75,7 +74,7 @@ const SavedTemplateDetailPage = () => {
     };
 
     return (
-        <DashboardLayout workflowHistory={mockWorkflowHistory}>
+        <>
             <DashboardHeader 
                 selectedSavedTemplate={selectedSavedTemplate}
                 showBackButton={true}
@@ -110,7 +109,7 @@ const SavedTemplateDetailPage = () => {
                     ))}
                 </div>
             </div>
-        </DashboardLayout>
+        </>
     );
 };
 

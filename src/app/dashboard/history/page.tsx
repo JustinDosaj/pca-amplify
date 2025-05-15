@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import DashboardHeader from '../components/DashboardHeader';
 import HistoryItem from '../components/HistoryItem';
-import DashboardLayout from '../components/DashboardLayout';
 import { mockWorkflowHistory } from '../data';
 
 const HistoryPage = () => {
@@ -17,7 +16,7 @@ const HistoryPage = () => {
     });
 
     return (
-        <DashboardLayout workflowHistory={mockWorkflowHistory}>
+        <>
             <DashboardHeader 
                 title="Workflow History"
                 historySearch={historySearch}
@@ -37,7 +36,7 @@ const HistoryPage = () => {
                     )}
                 </div>
             </div>
-        </DashboardLayout>
+        </>
     );
 };
 

@@ -3,12 +3,11 @@
 import React from 'react';
 import DashboardHeader from '../components/DashboardHeader';
 import SavedTemplateCard from '../components/SavedTemplateCard';
-import DashboardLayout from '../components/DashboardLayout';
-import { mockSavedTemplates, mockWorkflowHistory } from '../data';
+import { mockSavedTemplates } from '../data';
 
 const MyTemplatesPage = () => {
     return (
-        <DashboardLayout workflowHistory={mockWorkflowHistory}>
+        <>
             <DashboardHeader title="My Saved Templates" />
             <div className="flex-1 overflow-y-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
@@ -28,7 +27,7 @@ const MyTemplatesPage = () => {
                     )}
                 </div>
             </div>
-        </DashboardLayout>
+        </>
     );
 };
 

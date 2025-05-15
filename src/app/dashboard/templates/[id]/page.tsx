@@ -4,9 +4,8 @@ import React, { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import DashboardHeader from '../../components/DashboardHeader';
 import TaskDetail from '../../components/TaskDetail';
-import DashboardLayout from '../../components/DashboardLayout';
 import SaveTemplateModal from '../../components/SaveTemplateModal';
-import { mockWorkflowTemplates, mockWorkflowHistory } from '../../data';
+import { mockWorkflowTemplates } from '../../data';
 
 const TemplateDetailPage = () => {
     const params = useParams();
@@ -54,7 +53,7 @@ const TemplateDetailPage = () => {
     };
 
     return (
-        <DashboardLayout workflowHistory={mockWorkflowHistory}>
+        <>
             <DashboardHeader 
                 selectedWorkflow={selectedWorkflow}
                 showBackButton={true}
@@ -79,7 +78,7 @@ const TemplateDetailPage = () => {
                 setTemplateName={setNewTemplateName}
                 setTemplateDescription={setNewTemplateDescription}
             />
-        </DashboardLayout>
+        </>
     );
 };
 

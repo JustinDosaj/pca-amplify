@@ -3,15 +3,14 @@
 import React, { useState } from 'react';
 import DashboardHeader from '../components/DashboardHeader';
 import AccountTabs from '../components/AccountTabs';
-import DashboardLayout from '../components/DashboardLayout';
-import { pricingPlans, mockWorkflowHistory } from '../data';
+import { pricingPlans } from '../data';
 import { AccountTab } from '../types';
 
 const AccountPage = () => {
     const [accountTab, setAccountTab] = useState<AccountTab>('general');
 
     return (
-        <DashboardLayout workflowHistory={mockWorkflowHistory}>
+        <>
             <DashboardHeader 
                 title="My Account"
                 accountTab={accountTab}
@@ -25,7 +24,7 @@ const AccountPage = () => {
                     />
                 </div>
             </div>
-        </DashboardLayout>
+        </>
     );
 };
 

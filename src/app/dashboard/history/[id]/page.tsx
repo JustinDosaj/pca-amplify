@@ -4,7 +4,6 @@ import React from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import DashboardHeader from '../../components/DashboardHeader';
 import TaskDetail from '../../components/TaskDetail';
-import DashboardLayout from '../../components/DashboardLayout';
 import { mockWorkflowHistory } from '../../data';
 
 const HistoryDetailPage = () => {
@@ -33,7 +32,7 @@ const HistoryDetailPage = () => {
     }
 
     return (
-        <DashboardLayout workflowHistory={mockWorkflowHistory}>
+        <>
             <DashboardHeader 
                 selectedHistory={selectedHistory}
                 showBackButton={true}
@@ -62,7 +61,7 @@ const HistoryDetailPage = () => {
                     ))}
                 </div>
             </div>
-        </DashboardLayout>
+        </>
     );
 };
 
