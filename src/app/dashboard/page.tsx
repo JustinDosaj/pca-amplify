@@ -12,12 +12,10 @@ import {
     CheckCircleIcon,
     XCircleIcon,
     PlayIcon,
-    FunnelIcon,
     TrashIcon,
     ArrowUpIcon,
     XMarkIcon,
     EnvelopeIcon,
-    UserGroupIcon,
     CreditCardIcon,
     ChartBarIcon,
     InformationCircleIcon,
@@ -140,6 +138,50 @@ const mockWorkflowTemplates: WorkflowTemplate[] = [
     }
 ];
 
+// Mock data for workflow templates
+const mockSingleTasks: WorkflowTemplate[] = [
+    {
+        id: '1',
+        title: 'PII Removal',
+        description: 'Remove PII from input',
+        totalTasks: 1,
+        status: 'inactive',
+        tasks: [
+            {
+                id: '1-1',
+                name: 'PII Removal',
+                type: 'llm',
+                model: 'GPT-4',
+                status: 'pending',
+                settings: {
+                    inputType: 'url',
+                    instructions: 'Extract main content and key points'
+                }
+            },
+        ]
+    },
+    {
+        id: '2',
+        title: 'Content Summarization',
+        description: 'Summarize content for text input',
+        totalTasks: 1,
+        status: 'inactive',
+        tasks: [
+            {
+                id: '2-1',
+                name: 'Content Summarization',
+                type: 'llm',
+                model: 'GPT-4',
+                status: 'pending',
+                settings: {
+                    inputType: 'text',
+                    instructions: 'Identify and remove all PII'
+                }
+            },
+        ]
+    }
+];
+
 // Mock data for workflow history
 const mockWorkflowHistory: WorkflowHistory[] = [
     {
@@ -255,12 +297,12 @@ const pricingPlans = [
 ];
 
 // Mock data for usage history
-const usageHistory = [
-    { date: '2024-03-01', tokens: 20 },
-    { date: '2024-03-08', tokens: 35 },
-    { date: '2024-03-15', tokens: 25 },
-    { date: '2024-03-22', tokens: 40 }
-];
+// const usageHistory = [
+//     { date: '2024-03-01', tokens: 20 },
+//     { date: '2024-03-08', tokens: 35 },
+//     { date: '2024-03-15', tokens: 25 },
+//     { date: '2024-03-22', tokens: 40 }
+// ];
 
 // Mock data for saved templates
 const mockSavedTemplates = [
@@ -299,7 +341,8 @@ type ViewMode =
     | 'all-history'
     | 'account'
     | 'my-templates'
-    | 'saved-template';
+    | 'saved-template'
+    | 'tasks';
 
 type AccountTab = 'general' | 'billing' | 'usage' | 'earn';
 
@@ -344,6 +387,16 @@ const TestPage = () => {
                     <div className="sticky top-0 z-10 bg-white border-b border-slate-200 p-4">
                         <div className="flex items-center justify-between">
                             <h1 className="text-xl font-semibold text-slate-900">Workflow Templates</h1>
+                            <div className="w-[400px]"></div> {/* Spacer to maintain consistent header height */}
+                        </div>
+                    </div>
+                );
+            
+            case 'tasks':
+                return (
+                    <div className="sticky top-0 z-10 bg-white border-b border-slate-200 p-4">
+                        <div className="flex items-center justify-between">
+                            <h1 className="text-xl font-semibold text-slate-900">Single Tasks</h1>
                             <div className="w-[400px]"></div> {/* Spacer to maintain consistent header height */}
                         </div>
                     </div>
@@ -618,6 +671,38 @@ const TestPage = () => {
                     </div>
                 );
 
+                case 'tasks':
+                    return (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                            {mockSingleTasks.map((task) => (
+                                <div 
+                                    key={task.id}
+                                    onClick={() => {
+                                        setSelectedWorkflow(task);
+                                        setViewMode('workflow');
+                                    }}
+                                    className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow cursor-pointer"
+                                >
+                                    <h3 className="text-lg font-semibold text-slate-900 mb-2">{task.title}</h3>
+                                    <p className="text-slate-600 mb-4">{task.description}</p>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-sm text-slate-500">
+                                            {task.totalTasks} tasks
+                                        </span>
+                                        <span className={`px-2 py-1 rounded-full text-xs font-medium
+                                            ${task.status === 'running' ? 'bg-blue-100 text-blue-800' :
+                                                task.status === 'completed' ? 'bg-green-100 text-green-800' :
+                                                task.status === 'failed' ? 'bg-red-100 text-red-800' :
+                                            'bg-slate-100 text-slate-800'}`}
+                                        >
+                                            {task.status}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    );
+
             case 'workflow':
                 return (
                     <div className="space-y-6 p-6">
@@ -791,7 +876,7 @@ const TestPage = () => {
                                 </div>
 
                                 <div className="bg-white rounded-lg border border-slate-200 p-6">
-                                    <h2 className="text-lg font-medium text-slate-900 mb-4 text-red-600">Danger Zone</h2>
+                                    <h2 className="text-lg font-medium mb-4 text-red-600">Danger Zone</h2>
                                     <div className="flex items-center justify-between">
                                         <div>
                                             <h3 className="font-medium text-slate-900">Delete Account</h3>
@@ -967,8 +1052,8 @@ const TestPage = () => {
                                     <div className="prose prose-sm text-slate-600">
                                         <p>Earn credits by inviting friends to join our platform. For each friend who signs up using your referral link:</p>
                                         <ul className="list-disc pl-5 mt-2 space-y-1">
-                                            <li>You'll receive 10 credits when they sign up</li>
-                                            <li>You'll receive 5 credits for each workflow they run</li>
+                                            <li>You will receive 10 credits when they sign up</li>
+                                            <li>You will receive 5 credits for each workflow they run</li>
                                             <li>Your friend will receive 5 bonus credits on signup</li>
                                         </ul>
                                         <div className="mt-4 p-4 bg-slate-50 rounded-md">
@@ -1249,6 +1334,15 @@ const TestPage = () => {
                         >
                             <BookmarkIcon className="h-5 w-5 mr-2 text-slate-900"/>
                             My Templates
+                        </Button>
+                        <Button 
+                            onClick={() => setViewMode('tasks')}
+                            variant="outline"
+                            color="slate"
+                            className="w-full justify-start rounded-md mt-2"
+                        >
+                            <BookmarkIcon className="h-5 w-5 mr-2 text-slate-900"/>
+                            Tasks
                         </Button>
                     </div>
 
