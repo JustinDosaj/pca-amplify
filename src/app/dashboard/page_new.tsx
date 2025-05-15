@@ -13,7 +13,7 @@ const DashboardPage = () => {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      <p className="text-slate-500">Loading dashboard...</p>
+      <div className="text-slate-500">Loading dashboard...</div>
     </div>
   );
 };
