@@ -2,7 +2,7 @@
 This repository contains the frontend application for the private chat app, built with [Next.js](https://nextjs.org/) and deployed via [AWS Amplify](https://aws.amazon.com/amplify/). The frontend provides the user interface and client-side functionality. It interacts with serverless APIs deployed separately through the [pca-serverless](https://github.com/JustinDosaj/pca-serverless) repository.
 
 ## Project Overview
-The overall goal of this project is to allow a typical LLM conversation to take place, but with the option to automatically remove personal identifiable information while maintaining original message context.
+The goal of this project is to allow a typical LLM conversation to take place, but with the option to automatically remove personal identifiable information while maintaining original message context.
 
 ### Features
 - **Conversations**: Interact with LLMs like you would with any other web app
